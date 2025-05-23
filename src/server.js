@@ -4,28 +4,47 @@ import mongoose, { Schema } from 'mongoose';
 import session from 'express-session';
 import passport from 'passport';
 import passportLocalMongoose from 'passport-local-mongoose';
-import { isAdmin } from './assets/isAdmin';
+import { isAdmin } from './assets/isAdmin.js';
+import dotenv from 'dotenv'
 
 
 const app = express();
+dotenv.config()
 
+app.use(cors({
+  origin: 'http://localhost:5173',
+  credentials: true
+}));
 
-
-// Middleware
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-mongoose.connect("mongodb://localhost:27017/sytitandb", {
-  useNewUrlParser: true,
-  useUnifiedTopology: true
-}).then(() => console.log("MongoDB connected"))
-  .catch((err) => console.error("MongoDB connection error:", err));
+app.use(session({
+  secret: process.env.SESSION_SECRET,
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false }
+}));
 
 app.use(passport.initialize());
 app.use(passport.session());
 
 
+mongoose.connect(process.env.MONGO_URI, {
+  useNewUrlParser: true,
+  useUnifiedTopology: true
+}).then(() => console.log("MongoDB connected"))
+  .catch((err) => console.error("MongoDB connection error:", err));
+
+
+
+
 const dogSchema = new mongoose.Schema({
+   serial_no:{
+      type:String,
+      required: true,
+      unique:[true, 'existing dog']
+   },
     name:{
         type:String,
         required: true
@@ -40,7 +59,7 @@ const dogSchema = new mongoose.Schema({
         type:String
     },
     head_size:{
-        type:String
+        type:String 
     },
     class:{
         type:String
@@ -59,6 +78,9 @@ const dogSchema = new mongoose.Schema({
     },
     tags:{
         type: Array
+    },
+    images:{
+      type:Array
     }
 
 
@@ -107,27 +129,37 @@ passport.use(Admin.createStrategy());
 passport.serializeUser(Admin.serializeUser());
 passport.deserializeUser(Admin.deserializeUser());
 
-// CORS: Allow frontend to communicate with backend
-app.use(cors({
-  origin: 'http://localhost:5173', // Frontend origin
-  credentials: true
-}));
-
-app.use(session({
-  secret: 'yourSecretKey',
-  resave: false,
-  saveUninitialized: false
-}));
 
 
-function ensureAuth(req, res, next) {
-  if (req.isAuthenticated()) return next();
-  res.status(401).json({ error: 'Unauthorized' });
+
+async function createInitialAdmin() {
+  const existingAdmin = await Admin.findOne({ email: process.env.ADM_EMAIL });
+  if (!existingAdmin) {
+    Admin.register( 
+      new Admin({
+        username: 'Lord faftini',
+        email: process.env.ADM_EMAIL ,
+        isAdmin: true
+      }),
+      process.env.ADM_PASSWORD, 
+      (err, user) => {
+        if (err) {
+          console.error('Error creating admin:', err);
+        } else {
+          console.log('Admin user created:', user.email);
+        }
+      }
+    );
+  } else {
+    console.log('Admin already exists.');
+  }
 }
+
+// createInitialAdmin();
 
 app.post('/contact', (req, res) => {
 
-  
+   
   console.log('Contact form submission:', req.body);
   res.status(200).json({ message: 'Contact received' });
 });
@@ -146,11 +178,28 @@ app.get('/dogs/:field', async (req, res) => {
 
 
 
-app.get('/admin/dashboard', (req, res) => {
-  res.redirect('/login')
+app.post('/admin/dashboard', isAdmin, async (req, res) => {
+   const serial_no = req.body.serial_no
+    try {
+    const existingDog = await Dog.findOne({ serial_no });
+    if (existingDog) {
+      return res.status(400).json({ error: 'Dog already registered' });
+    }
+
+    const dog = new Dog(req.body);
+
+    const newDog = await dog.save();
+    res.status(200).json({ message: 'successful', newDog });
+
+
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+
+    
 });
 
-app.post('/login', passport.authenticate('local'), isAdmin, (req, res) => {
+app.post('/admin/dashboard/login', passport.authenticate('local'), isAdmin,(req, res) => {  
   res.status(200).json({ message: 'Login success', user: req.user });
 });
 
@@ -158,6 +207,6 @@ app.post('/login', passport.authenticate('local'), isAdmin, (req, res) => {
 
 
 // Server Start
-app.listen(5000, () => {
+app.listen(process.env.PORT, () => {
   console.log('Server started on port 5000');
 });

@@ -20,8 +20,8 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
        
-          <Route path="/admin/dashboard" element={ <AuthProvider><ProtectedRoute> <Add /> </ProtectedRoute> </AuthProvider>} />
-          <Route path='/login' element={ <AuthProvider><Login /> </AuthProvider>}/>
+          <Route path="/admin/dashboard/login" element={ <AuthProvider> <Login />  </AuthProvider>} />
+          <Route path='/admin/dashboard' element={ <AuthProvider><ProtectedRoute> <Add /> </ProtectedRoute>  </AuthProvider>}/>
        
       </Routes>
       </Router>

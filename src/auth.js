@@ -13,11 +13,11 @@ export const studs = async (field) => {
   return await api.get(`/dogs/${field}`, dogdata);
 };
 
-export const admin = async (credentials) => {
-  return await api.get('/admin/dashboard', credentials)
+export const addData = async (dogData) => {
+  return await api.post('/admin/dashboard', dogData)
 }
 
 export const adminLogin = async (credentials) => {
-  return await api.get('/login', credentials)
+  return await api.post('/admin/dashboard/login', credentials)
 }
- 
+

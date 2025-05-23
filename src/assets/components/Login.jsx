@@ -1,6 +1,4 @@
-// src/pages/Login.jsx
 import React, { useState } from 'react';
-import axios from 'axios';
 import { useAuth } from '../../assets/Authprovider';
 import { useNavigate } from 'react-router-dom';
 import {adminLogin} from '../../auth'
@@ -18,19 +16,21 @@ const Login = () => {
 
   const handleLogin = async (e) => {
       e.preventDefault();
+      
       try {
           const response = await adminLogin(formData);
+          
           login(response.data.user);
-          navigate('/add');
+          navigate('/admin/dashboard');
       } catch (err) {
           const message = err?.response?.data?.error || 'Login failed';
           setError(message);
           console.error(message);
       }
-  };
+  };   
   
-
-  return (
+ 
+  return ( 
     <div className="min-h-screen flex items-center justify-center bg-gray-100 px-4">
       <form
         onSubmit={handleLogin}
@@ -58,7 +58,7 @@ const Login = () => {
           <label className="block text-gray-600 mb-1" htmlFor="password">Password</label>
           <input
             className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-blue-500"
-            type="password"
+            type="pasword"
             name="password"
             id="password"
             value={formData.password}
