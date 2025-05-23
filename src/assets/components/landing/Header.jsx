@@ -1,6 +1,10 @@
 import React from 'react'
+import { contact as sendMessage} from '../../../auth'
 
 const Header = () => {
+
+
+
   return (
    <section className='px-5 py-4 text-white lg:px-25 bg-[#252525] '>
         <div className='flex items-center justify-between'>
@@ -13,7 +17,7 @@ const Header = () => {
                 <li className='hover:underline hover:text-blue-500'><a href="/contact"></a>Our vision</li>
             </ul>
 
-            <button className='px-9 py-6 border-1 border-[#FFAC38] text-[#FFAC38] rounded-[40px] hover:bg-primary hover:text-white' >Contact us</button>
+            <button  className='px-9 py-6 border-1 border-[#FFAC38] text-[#FFAC38] rounded-[40px] hover:bg-primary hover:text-white' > Contact us</button>
 
         </div>
    </section>
