@@ -8,6 +8,7 @@ import Add from './assets/components/Add';
 import Contact from '../../intern/src/assets/components/Contact'
 import { AuthProvider } from './assets/Authprovider';
 import ProtectedRoute from './assets/Protectedroute';
+import Lobby from '../../intern/src/assets/components/Lobby';
 
 
 function App() {
@@ -22,7 +23,8 @@ function App() {
        
           <Route path="/admin/dashboard/login" element={ <AuthProvider> <Login />  </AuthProvider>} />
           <Route path='/admin/dashboard' element={ <AuthProvider><ProtectedRoute> <Add /> </ProtectedRoute>  </AuthProvider>}/>
-       
+        <Route path="/lobby" element={<Lobby />} />
+
       </Routes>
       </Router>
     </div>
