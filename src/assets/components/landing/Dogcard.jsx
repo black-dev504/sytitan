@@ -4,7 +4,7 @@ const Dogcard = (props) => {
   return (
     <div className='rounded-4xl max-w-[479px] flex flex-col  bg-[#252525]'>
         <div className=' w-full h-8/10'>
-        <img src={props.img} className='object-contain rounded-t-4xl overflow-hidden' alt="" />
+        <img src={props.img} className='object-contain w-full rounded-t-4xl overflow-hidden' alt="" />
         </div>
 
         <div className='flex flex-col pl-3 py-6'>

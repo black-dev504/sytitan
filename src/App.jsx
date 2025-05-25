@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
-import Header from './assets/components/landing/Header'
-import Home from './assets/components/landing/landing/Home'
+import Header from './assets/components/Header'
+import Home from './assets/components/landing/Home'
 import Login from './assets/components/Login';
 import Add from './assets/components/Add';
-import Contact from '../../intern/src/assets/components/Contact'
+import Contact from './assets/components/Contact'
 import { AuthProvider } from './assets/Authprovider';
 import ProtectedRoute from './assets/Protectedroute';
-import Lobby from '../../intern/src/assets/components/Lobby';
+import Lobby from './assets/components/Lobby';
 
 
 function App() {
@@ -23,7 +23,7 @@ function App() {
        
           <Route path="/admin/dashboard/login" element={ <AuthProvider> <Login />  </AuthProvider>} />
           <Route path='/admin/dashboard' element={ <AuthProvider><ProtectedRoute> <Add /> </ProtectedRoute>  </AuthProvider>}/>
-        <Route path="/lobby" element={<Lobby />} />
+          <Route path="/lobby" element={<Lobby />} />
 
       </Routes>
       </Router>

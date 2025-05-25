@@ -1,5 +1,4 @@
 import React from 'react'
-import { contact as sendMessage} from '../../../auth'
 
 const Header = () => {
 

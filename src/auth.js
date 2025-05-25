@@ -9,8 +9,8 @@ export const contact = async (credentials) => {
   return await api.post('/contact', credentials);
 };
 
-export const studs = async (field) => {
-  return await api.get(`/dogs/${field}`, dogdata);
+export const getDogs = async (field) => {
+  return await api.get(`/lobby/${field}`);
 };
 
 export const addData = async (dogData) => {
@@ -21,3 +21,6 @@ export const adminLogin = async (credentials) => {
   return await api.post('/admin/dashboard/login', credentials)
 }
 
+export const cloudinary = async (credentials) => {
+  return await api.post('/cloudnary-save', credentials)
+}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { contact as sendMessage } from '../../../auth';
+import { contact as sendMessage } from '../../auth';
 
 const Contact = () => {
   const [formData, setFormData] = useState({

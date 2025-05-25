@@ -7,7 +7,7 @@ import passportLocalMongoose from 'passport-local-mongoose';
 import { isAdmin } from './assets/isAdmin.js';
 import dotenv from 'dotenv'
 
-
+ 
 const app = express();
 dotenv.config()
 
@@ -164,12 +164,12 @@ app.post('/contact', (req, res) => {
   res.status(200).json({ message: 'Contact received' });
 });
 
-app.get('/dogs/:field', async (req, res) => {
+app.get('/lobby/:field', async (req, res) => {
   const entry = req.params.field;
 
   try {
-    const data = await Dog.find({ tags: { $in: [entry] } });
-    res.status(200).json({ message: 'Query successful', user: data });
+    const data = entry ==='all'? await Dog.find(): await Dog.find({ tags: { $in: [entry] } });
+    res.status(200).json({ message: 'Query successful', dog: data });
   } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Server error' });
@@ -203,6 +203,12 @@ app.post('/admin/dashboard/login', passport.authenticate('local'), isAdmin,(req,
   res.status(200).json({ message: 'Login success', user: req.user });
 });
 
+app.post('cloudinary-save', isAdmin, async(req,res)=>{
+  console.log(req);
+  res.status(200).json({ message: 'Login success', url: 'dd' });
+
+  
+})
 
 
 

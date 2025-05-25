@@ -3,6 +3,7 @@ import { useAuth } from '../Authprovider';
 import { addData as addDog } from '../../auth';
 import { useNavigate } from 'react-router-dom';
 import Pills from './Pills';
+import { cloudinary as saveToCloud } from '../../auth';
 
 
 const Add = () => {
@@ -11,6 +12,11 @@ const Add = () => {
   const [mssg, setMssg] = useState(`Welcome ${user.username}`)
   const [tags, setTags] = useState([])
   const [registries, setRegistries] = useState([])
+  const [images, setImages] = useState([])
+   const [previewImages, setPreviewImages] = useState([])
+    const [imgError, setImgError] = useState('')
+
+
   const [form, setForm] = useState({
     serial_no:"",
     name: "",
@@ -45,9 +51,18 @@ const Add = () => {
   };
 
   const handleImageChange = (e) => {
-    const files = Array.from(e.target.files).slice(0, 3); // Limit to 3
-    setForm((prev) => ({ ...prev, images: files }));
-  };
+ 
+    const file = e.target.files
+    if (!file) return
+    const image = file[0]
+    
+    const imageUrl = URL.createObjectURL(file[0]);
+    if (previewImages.length<3){
+      setPreviewImages((prev)=>[...prev,imageUrl]) 
+      setImages((prev)=>[...prev,image])
+  }
+  else setImgError('maximum of three pictures ');
+}
 
   useEffect(() => {
     setForm((prev) => ({
@@ -58,17 +73,27 @@ const Add = () => {
 }, [tags, registries]);
 
 
-  const handleSubmit = async(e) => {
+  const handleRemove = (image) =>{
+    setPreviewImages(
+      previewImages.filter((img)=>image !== img)
+    )
+    setImages(
+      images.filter((img)=>image !== img)
+    )
+    setImgError('')
+  }
+    const handleSubmit = async(e) => {
     e.preventDefault();
     const data = new FormData();
+    images.forEach((image)=>{
+      data.append('image', image)
+      data.append('upload_preset', 'sytitan-preset')
+      data.append('cloud_name', 'dtlwdfpjb')
+    })
 
-    //  Object.entries(form).forEach(([key, value]) => {
-    //   if (key === "images") {
-    //     value.forEach((img, idx) => data.append("images", img));
-    //   } else {
-    //     data.append(key, value);
-    //   }
-    // });
+    const response = await saveToCloud(data)
+    console.log(response.data);
+    
   
   
       try {
@@ -89,6 +114,7 @@ const Add = () => {
                   });
               setTags([])
               setRegistries([])
+              setPreviewImages([])
               navigate('/admin/dashboard');
 
 
@@ -141,6 +167,28 @@ const Add = () => {
         onChange={handleImageChange}
         className="w-full"
       />
+
+     <div className='block'>
+  {previewImages.map((image, index) => (
+    <div
+      key={index}
+      className="max-w-[200px] max-h-[200px] relative inline-block mr-2 mt-2"
+    >
+      <img
+        src={image}
+        alt={`preview-${index}`}
+        className='max-w-[200px] object-cover max-h-[200px]'
+      />
+      <div className='bg-white hover:bg-red-500 absolute left-[80%] mt-1 mr-2 top-0  rounded-full'>
+        <button   type="button" className='text-black px-2' onClick={() => handleRemove(image)}>
+          X
+        </button>
+      </div>
+    </div>
+  ))}
+  <h1 className='text-red-500 text-xl'>{imgError}</h1>
+</div>
+
 
       <button type="submit" className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
         Submit
