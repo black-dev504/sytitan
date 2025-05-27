@@ -28,3 +28,10 @@
     background-color: var(--primary-color); 
     color: white
 }
+
+.sub-img{
+  height: 120px;
+  width: 120px;
+
+  border-radius: 20px;
+}

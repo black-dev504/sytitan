@@ -22,5 +22,13 @@ export const adminLogin = async (credentials) => {
 }
 
 export const cloudinary = async (credentials) => {
-  return await api.post('/cloudnary-save', credentials)
+  return await api.post('/cloudinarysave', credentials)
+}
+
+export const profile = async (serial_no) => {
+  return await api.get(`/profile/${serial_no}`);
+}
+
+export const similar = async (id) => {
+  return await api.get(`/similar/${id}`);
 }

@@ -9,6 +9,7 @@ import Contact from './assets/components/Contact'
 import { AuthProvider } from './assets/Authprovider';
 import ProtectedRoute from './assets/Protectedroute';
 import Lobby from './assets/components/Lobby';
+import Profile from './assets/components/Profile';
 
 
 function App() {
@@ -23,7 +24,9 @@ function App() {
        
           <Route path="/admin/dashboard/login" element={ <AuthProvider> <Login />  </AuthProvider>} />
           <Route path='/admin/dashboard' element={ <AuthProvider><ProtectedRoute> <Add /> </ProtectedRoute>  </AuthProvider>}/>
-          <Route path="/lobby" element={<Lobby />} />
+          <Route path="/lobby" element={<AuthProvider> <Lobby />  </AuthProvider>} />
+          <Route path="/profile" element={<AuthProvider> <Profile />  </AuthProvider>} />
+
 
       </Routes>
       </Router>

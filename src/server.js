@@ -6,6 +6,7 @@ import passport from 'passport';
 import passportLocalMongoose from 'passport-local-mongoose';
 import { isAdmin } from './assets/isAdmin.js';
 import dotenv from 'dotenv'
+import { dog } from '@cloudinary/url-gen/qualifiers/focusOn';
 
  
 const app = express();
@@ -165,7 +166,7 @@ app.post('/contact', (req, res) => {
 });
 
 app.get('/lobby/:field', async (req, res) => {
-  const entry = req.params.field;
+  const entry = req.params.field.toLowerCase();
 
   try {
     const data = entry ==='all'? await Dog.find(): await Dog.find({ tags: { $in: [entry] } });
@@ -203,12 +204,67 @@ app.post('/admin/dashboard/login', passport.authenticate('local'), isAdmin,(req,
   res.status(200).json({ message: 'Login success', user: req.user });
 });
 
-app.post('cloudinary-save', isAdmin, async(req,res)=>{
-  console.log(req);
-  res.status(200).json({ message: 'Login success', url: 'dd' });
+app.post('/cloudinarysave', isAdmin, async(req,res)=>{
+ 
+  
+  const response = await fetch(process.env.CLOUDINARY_URL, {
+    method: 'POST',
+    body: req.body,
+  });
+  res.status(200).json({ message: 'Login success', url: response });
 
   
 })
+
+app.get('/profile/:serial_no', async (req, res) => {
+
+  const serial_no = req.params.serial_no;
+  try {
+    const user = await Dog.findOne({ serial_no });
+    if (!user) {
+      return res.status(404).json({ error: 'User not found' });
+    }
+
+    res.status(200).json({ dog: user });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Server error' });
+  }
+})
+
+app.get('/similar/:id', async (req, res) => {
+  const dogId = req.params.id;
+
+  try {
+    // Step 1: Find the dog by ID or serial number
+    const dog = await Dog.findOne({ serial_no: dogId });
+    console.log(dog);
+    
+
+    if (!dog) {
+      return res.status(404).json({ message: 'Dog not found' });
+    }
+
+    // Step 2: Pick a random tag from the dog's tags
+    const tagIndex = Math.floor(Math.random() * dog.tags.length);
+    const randomTag = dog.tags[tagIndex];
+    
+
+    // Step 3: Find other dogs that share that tag, excluding the current dog
+    const relatedDogs = await Dog.find({
+      serial_no: { $ne: dog.serial_no },
+      tags: { $in:randomTag }
+    }).limit(3);
+
+    res.status(200).json({
+      message: 'Query successful',
+      dogs: relatedDogs,
+    });
+
+  } catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+});
 
 
 

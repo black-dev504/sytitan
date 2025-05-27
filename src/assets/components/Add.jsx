@@ -3,7 +3,8 @@ import { useAuth } from '../Authprovider';
 import { addData as addDog } from '../../auth';
 import { useNavigate } from 'react-router-dom';
 import Pills from './Pills';
-import { cloudinary as saveToCloud } from '../../auth';
+import axios from 'axios';  
+const CLOUDINARY_URL = import.meta.env.VITE_CLOUDINARY_URL;
 
 
 const Add = () => {
@@ -54,7 +55,8 @@ const Add = () => {
  
     const file = e.target.files
     if (!file) return
-    const image = file[0]
+    
+    const image = file[0];
     
     const imageUrl = URL.createObjectURL(file[0]);
     if (previewImages.length<3){
@@ -82,48 +84,66 @@ const Add = () => {
     )
     setImgError('')
   }
-    const handleSubmit = async(e) => {
-    e.preventDefault();
-    const data = new FormData();
-    images.forEach((image)=>{
-      data.append('image', image)
-      data.append('upload_preset', 'sytitan-preset')
-      data.append('cloud_name', 'dtlwdfpjb')
-    })
 
-    const response = await saveToCloud(data)
-    console.log(response.data);
-    
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  try {
+    // Upload images
+   const uploadPromises = images.map(async (image) => {
+  const data = new FormData();
+  data.append('file', image);
+  data.append('upload_preset', 'sytitan-preset');
+
+  const response = await axios.post(
+    import.meta.env.VITE_CLOUDINARY_URL,
+    data
+  );
   
-  
-      try {
-              const response = await addDog(form);
-              setMssg(`Succesfully added ${form.name}`)
-              setForm({
-                    serial_no:"",
-                    name: "",
-                    age: "",
-                    color: "",
-                    tags: [],
-                    pedigree: "",
-                    height: "",
-                    headSize: "",
-                    dogClass: "",
-                    registries: [],
-                    images: [],
-                  });
-              setTags([])
-              setRegistries([])
-              setPreviewImages([])
-              navigate('/admin/dashboard');
+  return response.data.secure_url;
+});
 
 
-          } catch (err) {
-              const message = err?.response?.data?.error ;
-              setMssg(message);
-              console.error(message);
-          }
-  };
+
+    const uploadedImageUrls = await Promise.all(uploadPromises);
+
+    const newDog = {
+      ...form,
+      images: uploadedImageUrls,
+    };
+
+    const response = await addDog(newDog);
+
+    setMssg(`Successfully added ${form.name}`);
+    // Reset form and states
+    setForm({
+      serial_no: "",
+      name: "",
+      age: "",
+      color: "",
+      tags: [],
+      pedigree: "",
+      height: "",
+      headSize: "",
+      dogClass: "",
+      registries: [],
+      images: [],
+    });
+    setTags([]);
+    setRegistries([]);
+    setImages([]);
+    setPreviewImages([]);
+    setImgError('');
+    navigate('/admin/dashboard');
+
+  } catch (err) {
+    const message = err?.response?.data?.error || 'Something went wrong';
+    setMssg(message);
+    console.error(message);
+  }
+};
+  if (!user) {
+    return <h1 className='text-5xl font-black'>Please login to access this page</h1>
+  }
 
   return (
     <section className='lg:px-35 px-5 pt-20 '>
@@ -166,6 +186,7 @@ const Add = () => {
         accept="image/*"
         onChange={handleImageChange}
         className="w-full"
+        required
       />
 
      <div className='block'>
