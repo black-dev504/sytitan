@@ -22,10 +22,10 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
        
-          <Route path="/admin/dashboard/login" element={ <AuthProvider> <Login />  </AuthProvider>} />
-          <Route path='/admin/dashboard' element={ <AuthProvider><ProtectedRoute> <Add /> </ProtectedRoute>  </AuthProvider>}/>
-          <Route path="/lobby" element={<AuthProvider> <Lobby />  </AuthProvider>} />
-          <Route path="/profile" element={<AuthProvider> <Profile />  </AuthProvider>} />
+          <Route path="/admin/dashboard/login" element={  <Login />  } />
+          <Route path='/admin/dashboard' element={ <ProtectedRoute> <Add /> </ProtectedRoute>  }/>
+          <Route path="/lobby" element={ <Lobby />  } />
+          <Route path="/profile" element={ <Profile /> } />
 
 
       </Routes>

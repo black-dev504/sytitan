@@ -1,53 +1,30 @@
-import React from 'react'
+import {useState, useEffect} from 'react'
 import Dogcard from './Dogcard'
+import {dogs as getDogs} from "../../../auth"
 
 const Dogs = () => {
-  const data = [
-    {
-      name: 'Karla',
-      age: 2,
-      status: 'Sold',
-      img: '/images/bully1.png'
-    },
-     {
-      name: 'Karla',
-      age: 2,
-      status: 'Sold',
-      img: '/images/bully2.png'
-    },
-     {
-      name: 'Karla',
-      age: 2,
-      status: 'Sold',
-      img: '/images/bully3.png'
-    },
-     {
-      name: 'Karla',
-      age: 2,
-      status: 'Sold',
-      img: '/images/bully4.png'
-    },
-     {
-      name: 'Karla',
-      age: 2,
-      status: 'Sold',
-      img: '/images/bully5.png'
-    },
-     {
-      name: 'Karla',
-      age: 2,
-      status: 'Sold',
-      img: '/images/bully6.png'
-    }
-  ]
+const [dogs,setDogs] = useState([])
+   useEffect(() => {
+              const fetchDogs = async () => {
+              try {
+                const response = await getDogs(null,6)
+                
+                setDogs(response.data.dogs)
+              } catch (err) {
+                console.error('Failed to fetch dogs:', err);
+              }
+            };
+    
+        fetchDogs();
+      }, []);
   return (
   <section className=' bg-black justify-center flex flex-col items-center' >
 
         <h1 className='text-5xl text-[#ECECEC] font-semibold text-center py-12'>MEET THE BULLIES</h1>
         <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-12 px-5 lg:px-25 pt-8'>
 
-          {data.map((data,index)=>(
-             <Dogcard name={data.name} age={data.age} status={data.status} img={data.img} key={index}/>
+          {dogs.map((dog,index)=>(
+             <Dogcard name={dog.name} age={dog.age} color={dog.color} images={dog.images} serial_no={dog.serial_no} key={index}/>
 
           ))}
         </div>

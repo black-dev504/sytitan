@@ -1,6 +1,6 @@
 import react from 'react'
 import { useAuth } from '../Authprovider'
-import { similar } from '../../auth';
+import { dogs as similar } from '../../auth';
 import React, { useEffect } from 'react';
 import Dogcard from './landing/Dogcard';
 
@@ -23,7 +23,7 @@ const Profile = () => {
     useEffect(() => {
             const fetchSimilar = async () => {
             try {
-              const response = await similar(dog.serial_no)
+              const response = await similar(dog.serial_no,3)
               console.log('similar=' , response.data.dogs);
               
               setSimilarDogs(response.data.dogs)
@@ -82,6 +82,10 @@ const Profile = () => {
        <div className="flex justify-between text-white text-xl py-1 gap-6">
             <span className="font-bold">Class</span>
            {dog.class? <span>{dog.class}</span>: <span className='text-red-500'>Not Available</span>}
+      </div>
+             <div className="flex justify-between text-white text-xl py-1 gap-6">
+            <span className="font-bold">Status</span>
+           {dog.status? <span>{dog.status}</span>: <span className='text-red-500'>Not Available</span>}
       </div>
        <div className="flex justify-between text-white text-xl py-1 gap-6">
             <span className="font-bold">Registries</span>

@@ -2,11 +2,11 @@ import React from 'react'
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../Authprovider'
 import { profile as getProfile} from '../../../auth'
-const Dogcard = ({images, name, age, status, serial_no}) => {
+const Dogcard = ({images, name, age, color, serial_no}) => {
 
   const { setDogData } = useAuth();
   const navigate = useNavigate();
-  const [imgplaceholder, setImgPlaceholder] = React.useState('/images/bully1.png');
+  // const [imgplaceholder, setImgPlaceholder] = React.useState('/images/bully1.png');
   const handleClick = async()=>{
    const response = await getProfile(serial_no)
       .then((response)=>{
@@ -28,7 +28,7 @@ const Dogcard = ({images, name, age, status, serial_no}) => {
         <div className='flex flex-col pl-3 py-5'>
             <h2 className='my-2 font-bold text-[#ECECEC] text-[20px] '><span className='text-white'>{name}</span></h2>
             <p className='text-[#FFAC38] text-[16px] font-bold'>Age: {age? <span className='text-white'>{age}</span>: <span className='text-red-500'>Not Available</span>}</p>
-            <p className='text-[#FFAC38] text-[16px] font-bold'>Status:  {status? <span className='text-white'>{status}</span>: <span className='text-red-500'>Not Available</span>}
+            <p className='text-[#FFAC38] text-[16px] font-bold'>Color:  {color? <span className='text-white'>{color}</span>: <span className='text-red-500'>Not Available</span>}
 </p>
         </div>
 

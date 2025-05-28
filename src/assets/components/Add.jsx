@@ -26,7 +26,10 @@ const Add = () => {
     tags: [],
     pedigree: "",
     height: "",
+    gender:"",
+    status:"",
     headSize: "",
+    desc:"",
     dogClass: "",
     registries: [],
     images: [],
@@ -34,7 +37,7 @@ const Add = () => {
 
    const addPill = (event, arr, setArr) => {
     if ((event.key === ' ' || event.key === 'Enter') && event.target.value.trim()) {
-      const entry = event.target.value.trim();
+      const entry = event.target.value.trim().toUpperCase();
       event.target.value = '';
       if (!arr.includes(entry)) {
         setArr((prev) => [entry, ...prev]);
@@ -48,7 +51,7 @@ const Add = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setForm((prev) => ({ ...prev, [name]: value }));
+    setForm((prev) => ({ ...prev, [name]: value.toUpperCase() }));
   };
 
   const handleImageChange = (e) => {
@@ -123,7 +126,10 @@ const Add = () => {
       tags: [],
       pedigree: "",
       height: "",
+      status: "",
       headSize: "",
+      desc:"",
+      gender:"",
       dogClass: "",
       registries: [],
       images: [],
@@ -164,6 +170,8 @@ const Add = () => {
       <input name="age" type="text" placeholder="Age" value={form.age} onChange={handleChange} className="w-full p-2 border rounded" />
       <input name="color" type="text" placeholder="Color" value={form.color} onChange={handleChange} className="w-full p-2 border rounded" />
       <input name="height" type="text" placeholder="Height" value={form.height} onChange={handleChange} className="w-full p-2 border rounded" />
+      <input name="gender" type="text" placeholder="Gender" value={form.gender} onChange={handleChange} className="w-full p-2 border rounded" />
+  
       <input name="headSize" type="text" placeholder="Head Size" value={form.headSize} onChange={handleChange} className="w-full p-2 border rounded" />
       <input name="dogClass" type="text" placeholder="Class" value={form.dogClass} onChange={handleChange} className="w-full p-2 border rounded" />
       <input name="tags" type="text" placeholder="Tags"  onKeyDown={(e) => addPill(e, tags, setTags)} className="w-full p-2 border rounded" required/>
@@ -179,6 +187,29 @@ const Add = () => {
                     <Pills value={registry} key={index} onRemove={() => removePill(registry, setRegistries)} />
                   ))}
                 </div>
+       <textarea rows={4} name="desc" type="textfield" placeholder="description" value={form.desc} onChange={handleChange} className="w-full p-2 border rounded" />
+            <div>
+      <label>
+        <input
+          type="radio"
+          name="status"
+          value="For sale"
+          onChange={handleChange}
+          className="mr-1 ml-3"
+        />
+        For Sale
+      </label>
+        <label>
+        <input
+          type="radio"
+          name="status"
+          value="Not for sale"
+          onChange={handleChange}
+          className="mr-1 ml-5"
+        />
+        Not for Sale
+      </label>
+      </div>
       <label className="block mt-2 font-medium">Upload up to 3 Images:</label>
       <input
         type="file"

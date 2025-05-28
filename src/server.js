@@ -71,11 +71,15 @@ const dogSchema = new mongoose.Schema({
     desc:{
         type:String
     },
+    age:{
+       type:String
+
+    },
     gender:{
         type:String
     },
-    is_puppy:{
-        type:Boolean
+    status:{
+        type:String
     },
     tags:{
         type: Array
@@ -232,8 +236,24 @@ app.get('/profile/:serial_no', async (req, res) => {
   }
 })
 
-app.get('/similar/:id', async (req, res) => {
+app.get('/dogs/:id/:limit', async (req, res) => {
   const dogId = req.params.id;
+  const limit = req.params.limit
+
+  if (dogId === "null"){
+    try{
+      const dogs = await Dog.find().limit(parseInt(limit));
+     res.status(200).json({
+      message: 'Query successful',
+      dogs: dogs,
+    });
+  }catch (err) {
+    res.status(500).json({ message: 'Server error', error: err.message });
+  }
+
+    
+
+  }
 
   try {
     // Step 1: Find the dog by ID or serial number
@@ -254,7 +274,7 @@ app.get('/similar/:id', async (req, res) => {
     const relatedDogs = await Dog.find({
       serial_no: { $ne: dog.serial_no },
       tags: { $in:randomTag }
-    }).limit(3);
+    }).limit(limit);
 
     res.status(200).json({
       message: 'Query successful',

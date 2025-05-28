@@ -29,6 +29,6 @@ export const profile = async (serial_no) => {
   return await api.get(`/profile/${serial_no}`);
 }
 
-export const similar = async (id) => {
-  return await api.get(`/similar/${id}`);
+export const dogs = async (id,limit) => {
+  return await api.get(`/dogs/${id}/${limit}`);
 }
