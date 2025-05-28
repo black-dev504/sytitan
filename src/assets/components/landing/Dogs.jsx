@@ -1,8 +1,11 @@
 import {useState, useEffect} from 'react'
 import Dogcard from './Dogcard'
 import {dogs as getDogs} from "../../../auth"
+import { useNavigate } from 'react-router-dom';
 
 const Dogs = () => {
+const navigate = useNavigate();
+
 const [dogs,setDogs] = useState([])
    useEffect(() => {
               const fetchDogs = async () => {
@@ -28,7 +31,7 @@ const [dogs,setDogs] = useState([])
 
           ))}
         </div>
-      <button className='px-9 py-6 hover:border-1 max-w-[200px] mt-8 cursor-pointer rounded-[40px] bg-primary text-white' >View more </button>
+      <button onClick={()=>navigate('/lobby')} className='px-9 py-6 hover:border-1 max-w-[200px] mt-8 cursor-pointer rounded-[40px] bg-primary text-white' >View more </button>
 
   </section>
   )

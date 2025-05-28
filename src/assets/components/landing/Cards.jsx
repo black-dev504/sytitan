@@ -22,7 +22,7 @@ const Cards = () => {
         }
     ]
   return (
-    <div className='grid grid-cols-3 gap-6 primary-font bg-[#252525] px-25 '>
+    <div className='grid grid-cols-1 lg:grid-cols-3 gap-6 primary-font bg-[#252525] px-5 md:px-25 '>
         {data.map((data,index)=>(
             <Card key={index} img={data.img} title= {data.title} paragraph={data.paragraph} />
         ))}
