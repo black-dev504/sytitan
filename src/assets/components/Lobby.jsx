@@ -56,7 +56,7 @@ const Lobby = () => {
       </div>
 
       <div className="px-5 lg:px-20 bg-[#252525] py-12">
-        <div className="filters flex gap-6">
+        <div className="filters flex overflow-x-auto  gap-6">
            {data.map((filter,index)=>(
                 <Filterbutton text={filter} 
                  key={index}
