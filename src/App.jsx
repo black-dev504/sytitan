@@ -22,7 +22,7 @@ function App() {
         <ScrollToTop />
       <Header />
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/sytitan/" element={<Home />} />
         <Route path="/contact" element={<Contact />} />
        
           <Route path="/admin/dashboard/login" element={  <Login />  } />
