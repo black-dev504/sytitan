@@ -13,7 +13,7 @@ const app = express();
 dotenv.config()
 
 app.use(cors({
-  origin: ['http://localhost:5173', 'https://black-dev504.github.io/sytitan/'],
+  origin: ['http://localhost:5173', 'https://black-dev504.github.io/sytitan/', 'https://vercel.com/black-dev504s-projects/sytitan'],
   credentials: true
 }));
 
