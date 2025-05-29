@@ -1,7 +1,8 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://sytitan.onrender.com',
+  baseURL: 'http://localhost:5000',
+  //  'https://sytitan.onrender.com',
   withCredentials: true // 👈 include cookies with requests
 });
 
