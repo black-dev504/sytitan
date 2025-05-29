@@ -18,6 +18,10 @@ export const addData = async (dogData) => {
   return await api.post('/admin/dashboard', dogData)
 }
 
+export const getAdmin = async () => {
+  return await api.get('/admin/dashboard')
+}
+
 export const adminLogin = async (credentials) => {
   return await api.post('/admin/dashboard/login', credentials)
 }

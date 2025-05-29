@@ -1,14 +1,15 @@
-import React from 'react'
+import { useNavigate } from "react-router-dom"
 
 const Footer = () => {
+  const navigate = useNavigate()
   return (
 <footer className="bg-gray-900 text-gray-300 py-8 px-6">
   <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-6">
     {/* Left Side - Branding or Info */}
     <div className="text-center md:text-left">
-      <div className="w-[200px]">
+      <button onClick={()=>navigate('/admin/dashboard')} className="w-[200px]">
         <img src="/icons/footerlogo1.svg" alt="footerlogo" className='object-cover overflow-hidden w-full mt-5'/>
-      </div>
+      </button>
       <p className="text-sm mt-1">© {new Date().getFullYear()} All rights reserved.</p>
     </div>
 
