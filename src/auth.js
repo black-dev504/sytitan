@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const api = axios.create({
-  baseURL: 'https://sytitan.vercel.app/',
+  baseURL: 'https://sytitan.vercel.app',
   withCredentials: true // 👈 include cookies with requests
 });
 
