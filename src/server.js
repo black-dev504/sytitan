@@ -170,10 +170,10 @@ app.post('/contact', (req, res) => {
 });
 
 app.get('/lobby/:field', async (req, res) => {
-  const entry = req.params.field.toLowerCase();
+  const entry = req.params.field;
 
   try {
-    const data = entry ==='all'? await Dog.find(): await Dog.find({ tags: { $in: [entry] } });
+    const data = entry ==='ALL'? await Dog.find(): await Dog.find({ tags: { $in: [entry] } });
     res.status(200).json({ message: 'Query successful', dog: data });
   } catch (err) {
     console.error(err);

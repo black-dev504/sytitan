@@ -70,39 +70,41 @@ const Profile = () => {
       <div className="details justify-start flex flex-col">
         
         <h1 className='text-white font-bold text-[40px] text-primary'>{dog.name}</h1>
-        <div className="flex justify-between text-white text-xl py-1 gap-6">
+        <div className="flex items-center text-white w-full text-xl py-1 gap-6">
             <span className="font-bold">Pedigree</span>
-            {dog.pedigree?<a className='text-blue-500 hover:underline' href={dog.pedigree}>{dog.pedigree}</a>: <span className='text-red-500'>Not Available</span>}
+            
+            {dog.pedigree?<p className='text-[14px]'><a className='text-blue-500 hover:underline ' target="_blank" rel="noopener noreferrer" href={dog.pedigree.toLowerCase()}>{dog.pedigree.toLowerCase()}</a></p>: <span className='text-red-500'>Not Available</span>}
+            
       </div>
-        <div className="flex justify-between text-white text-xl py-1 gap-6">
+        <div className="flex   text-white text-xl py-1 gap-6">
             <span className="font-bold">Gender</span>
            {dog.gender? <span>{dog.gender}</span>: <span className='text-red-500'>Not Available</span>}
       </div>
-       <div className="flex justify-between text-white text-xl py-1 gap-6">
+       <div className="flex   text-white text-xl py-1 gap-6">
             <span className="font-bold">Age</span>
            {dog.age? <span>{dog.age}</span>: <span className='text-red-500'>Not Available</span>}
       </div>
-       <div className="flex justify-between text-white text-xl py-1 gap-6">
+       <div className="flex   text-white text-xl py-1 gap-6">
             <span className="font-bold">Color</span>
            {dog.color? <span>{dog.color}</span>: <span className='text-red-500'>Not Available</span>}
       </div>
-       <div className="flex justify-between text-white text-xl py-1 gap-6">
+       <div className="flex   text-white text-xl py-1 gap-6">
             <span className="font-bold">Height</span>
            {dog.height? <span>{dog.height}</span>: <span className='text-red-500'>Not Available</span>}
       </div>
-       <div className="flex justify-between text-white text-xl py-1 gap-6">
+       <div className="flex   text-white text-xl py-1 gap-6">
             <span className="font-bold">Head size</span>
            {dog.headsize? <span>{dog.headsize}</span>: <span className='text-red-500'>Not Available</span>}
       </div>
-       <div className="flex justify-between text-white text-xl py-1 gap-6">
+       <div className="flex   text-white text-xl py-1 gap-6">
             <span className="font-bold">Class</span>
            {dog.class? <span>{dog.class}</span>: <span className='text-red-500'>Not Available</span>}
       </div>
-             <div className="flex justify-between text-white text-xl py-1 gap-6">
+             <div className="flex   text-white text-xl py-1 gap-6">
             <span className="font-bold">Status</span>
            {dog.status? <span>{dog.status}</span>: <span className='text-red-500'>Not Available</span>}
       </div>
-       <div className="flex justify-between text-white text-xl py-1 gap-6">
+       <div className="flex   text-white text-xl py-1 gap-6">
             <span className="font-bold">Registries</span>
           {dog.registries && dog.registries.length > 0 ? (<span>{dog.registries.join(', ')}</span>) : (<span className='text-red-500'>Not Available</span>)}
            
