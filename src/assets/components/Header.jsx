@@ -5,8 +5,8 @@ const [isMenuOpen, setIsMenuOpen] = useState(false)
 
 
   return (
-   <section className='flex flex-col text-white lg:px-25 bg-[#252525] '>
-        <div className='flex px-5 py-4  items-center justify-between'>
+   <section className='flex flex-col text-white px-5 lg:px-20 bg-[#252525] '>
+        <div className='flex  py-4  items-center justify-between'>
             <img src="/icons/logo.svg" alt="logo" />
 
             <ul className=' hidden md:flex items-center gap-10 justify-between'>

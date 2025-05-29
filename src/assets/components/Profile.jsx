@@ -3,6 +3,7 @@ import { useAuth } from '../Authprovider'
 import { dogs as similar } from '../../auth';
 import React, { useEffect } from 'react';
 import Dogcard from './landing/Dogcard';
+import { set } from 'mongoose';
 
 
 const Profile = () => {
@@ -32,19 +33,33 @@ const Profile = () => {
             }
           };
   
-      fetchSimilar();
-    }, []);
+  if (dog?.serial_no) {
+    fetchSimilar();
+  }
+}, [dog.serial_no]);
+
+    useEffect(() => {
+
+    
+  if (images) {
+    setDisplayImage(images[0]);
+    setClicked(images[0]);
+  }
+
+}, [images]);
+
   return (
   <section className=' '>
-    <div className="container mx-auto flex flex-col lg:flex-row items-left lg:px-20 px-5 py-5 bg-[#252525] gap-15">
-      <div className="images flex gap-5">
-        <div className="main-img w-[400px] h-[400px] rounded-[20px] overflow-hidden">
+    <div className="container max-w-[1400px] mx-auto flex flex-col md:flex-row items-left lg:px-20 px-5 py-5 bg-[#252525] gap-10">
+      <div className="images flex lg:flex-row flex-col gap-5">
+        <div className="main-img w-full lg:w-[400px] h-[400px] rounded-[20px] overflow-hidden">
           <img className='object-cover w-full h-full overflow-hidden' src={displayImage} alt="" />
         </div>
 
-        <div className="sub-imgs flex flex-col gap-4">
+        <div className="sub-imgs flex flex-row lg:flex-col gap-4">
 
-          {images?images.map((image, index) => (
+          {images?  images.map((image, index) => (
+            
           <button key={index} onClick={() => handleImageClick(image)} className={`sub-img border-2 ${ clicked === image &&'border-amber-500'} cursor-pointer rounded-[20px]`} >
              <img className='object-cover w-full rounded-[20px] h-full overflow-hidden' src={image} alt="" />
           </button>)): null}
@@ -98,7 +113,7 @@ const Profile = () => {
             <div className="flex flex-col bg-[#131313] px-5 lg:px-20 py-10">
 
         <h1 className='text-5xl relative text-[#ECECEC] font-semibold text-center py-12'>SIMILAR BULLIES</h1>
-         <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-12 px-5 lg:px-25 pt-8'>
+         <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1  gap-8  pt-8'>
 
         
                   {similarDogs.length>0 && similarDogs.map((data,index)=>(

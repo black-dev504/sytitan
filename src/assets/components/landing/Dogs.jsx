@@ -24,14 +24,14 @@ const [dogs,setDogs] = useState([])
   <section className=' bg-black justify-center flex flex-col items-center' >
 
         <h1 className='text-5xl text-[#ECECEC] font-semibold text-center py-12'>MEET THE BULLIES</h1>
-        <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-12 px-5 lg:px-25 pt-8'>
+        <div className='flex flex-wrap gap-5 px-5 lg:px-10 pt-8'>
 
           {dogs.map((dog,index)=>(
              <Dogcard name={dog.name} age={dog.age} color={dog.color} images={dog.images} serial_no={dog.serial_no} key={index}/>
 
           ))}
         </div>
-      <button onClick={()=>navigate('/lobby')} className='px-9 py-6 hover:border-1 max-w-[200px] mt-8 cursor-pointer rounded-[40px] bg-primary text-white' >View more </button>
+      <button onClick={()=>navigate('/lobby')} className='px-9 py-6 mb-8 hover:border-1 max-w-[200px] mt-8 cursor-pointer rounded-[40px] bg-primary text-white' >View more </button>
 
   </section>
   )

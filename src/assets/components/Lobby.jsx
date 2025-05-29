@@ -69,7 +69,7 @@ const Lobby = () => {
 
        <section className=' bg-black justify-center flex flex-col items-center' >
 
-        <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-12 px-5 lg:px-25 py-8'>
+        <div className='grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 px-5 lg:px-20 py-8'>
 
           {dogs.length>0?dogs.map((data,index)=>(
              <Dogcard name={data.name} age={data.age} status={data.status} images={data.images} serial_no={data.serial_no} key={index}/>

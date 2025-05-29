@@ -9,7 +9,9 @@ import Contact from './assets/components/Contact'
 import { AuthProvider } from './assets/Authprovider';
 import ProtectedRoute from './assets/Protectedroute';
 import Lobby from './assets/components/Lobby';
+import ScrollToTop from './assets/components/scrollToTop';
 import Profile from './assets/components/Profile';
+import Footer from './assets/components/Footer';
 
 
 function App() {
@@ -17,6 +19,7 @@ function App() {
   return (
     <div className="primary-font w-full mx-auto overflow-hidden">
         <Router>
+        <ScrollToTop />
       <Header />
       <Routes>
         <Route path="/" element={<Home />} />
@@ -29,6 +32,7 @@ function App() {
 
 
       </Routes>
+      <Footer />
       </Router>
     </div>
   )

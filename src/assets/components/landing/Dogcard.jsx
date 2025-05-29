@@ -20,7 +20,7 @@ const Dogcard = ({images, name, age, color, serial_no}) => {
     
   }
   return (
-    <div className='rounded-t-4xl max-w-[479px] flex flex-col  bg-[#252525]'>
+    <div className='rounded-4xl md:min-w-0 min-w-[300px] max-w-[400px] flex flex-col  bg-[#252525]'>
         <div className=' w-full h-[300px]'>
         <img src={images[0]?images[0]:'/images/noimgplaceholder.svg'} className='object-cover w-full h-full rounded-t-4xl overflow-hidden' alt="" />
         </div>

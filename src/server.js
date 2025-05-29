@@ -243,12 +243,12 @@ app.get('/dogs/:id/:limit', async (req, res) => {
   if (dogId === "null"){
     try{
       const dogs = await Dog.find().limit(parseInt(limit));
-     res.status(200).json({
+      return res.status(200).json({
       message: 'Query successful',
       dogs: dogs,
     });
   }catch (err) {
-    res.status(500).json({ message: 'Server error', error: err.message });
+    return res.status(500).json({ message: 'Server error', error: err.message });
   }
 
     
@@ -258,7 +258,6 @@ app.get('/dogs/:id/:limit', async (req, res) => {
   try {
     // Step 1: Find the dog by ID or serial number
     const dog = await Dog.findOne({ serial_no: dogId });
-    console.log(dog);
     
 
     if (!dog) {

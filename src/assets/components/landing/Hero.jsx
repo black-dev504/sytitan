@@ -8,7 +8,7 @@ const navigate = useNavigate();
     <section className=' bg-black text-white'>
       <div className='grid grid-rows-1 lg:grid-cols-2'>
         {/* Left Section */}
-        <div className='flex flex-col justify-start my-16 px-10 py-14 bg-[#252525] opacity-90 rounded-3xl lg:ml-24 '>
+        <div className='flex flex-col justify-start my-16 px-10 py-14 bg-[#252525] opacity-90 rounded-3xl lg:ml-20 '>
           <h1 className='text-5xl font-semibold'>
             Purebred Passion Starts Here — Welcome to <span className='text-primary'>SY TITAN.</span>
           </h1>
