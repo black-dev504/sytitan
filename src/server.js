@@ -160,7 +160,7 @@ async function createInitialAdmin() {
   }
 }
 
-// createInitialAdmin();
+createInitialAdmin();
 
 app.post('/contact', (req, res) => {
 
