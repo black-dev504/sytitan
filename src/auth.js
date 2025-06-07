@@ -1,12 +1,12 @@
-import axios from 'axios';
+import axios from "axios";
 
 const api = axios.create({
-  baseURL:  'https://sytitan.onrender.com',
-  withCredentials: true // 👈 include cookies with requests
+  baseURL: "https://sytitan.onrender.com",
+  withCredentials: true, // 👈 include cookies with requests
 });
 
 export const contact = async (credentials) => {
-  return await api.post('/contact', credentials);
+  return await api.post("/contact", credentials);
 };
 
 export const getDogs = async (field) => {
@@ -14,25 +14,25 @@ export const getDogs = async (field) => {
 };
 
 export const addData = async (dogData) => {
-  return await api.post('/admin/dashboard', dogData)
-}
+  return await api.post("/admin/dashboard", dogData);
+};
 
 export const getAdmin = async () => {
-  return await api.get('/admin/dashboard')
-}
+  return await api.get("/admin/dashboard");
+};
 
 export const adminLogin = async (credentials) => {
-  return await api.post('/admin/dashboard/login', credentials)
-}
+  return await api.post("/admin/dashboard/login", credentials);
+};
 
 export const cloudinary = async (credentials) => {
-  return await api.post('/cloudinarysave', credentials)
-}
+  return await api.post("/cloudinarysave", credentials);
+};
 
 export const profile = async (serial_no) => {
   return await api.get(`/profile/${serial_no}`);
-}
+};
 
-export const dogs = async (id,limit) => {
+export const dogs = async (id, limit) => {
   return await api.get(`/dogs/${id}/${limit}`);
-}
+};
