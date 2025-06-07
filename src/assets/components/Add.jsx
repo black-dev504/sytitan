@@ -2,10 +2,11 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../Authprovider";
 import { addData as addDog } from "../../auth";
 import { useNavigate } from "react-router-dom";
+import { cloudinary as addImage } from "../../auth";
 import Pills from "./Pills";
 import axios from "axios";
 
-const CLOUDINARY_URL = import.meta.env.VITE_CLOUDINARY_URL;
+// const CLOUDINARY_URL = import.meta.env.VITE_CLOUDINARY_URL;
 
 const Add = () => {
   const { user } = useAuth();
@@ -116,7 +117,7 @@ const Add = () => {
         data.append("file", image);
         data.append("upload_preset", "sytitan-preset");
 
-        const response = await axios.post(CLOUDINARY_URL, data);
+        const response = await addImage(data);
 
         return response.data.secure_url;
       });
@@ -139,6 +140,8 @@ const Add = () => {
       setImages([]);
       setPreviewImages([]);
       setImgError("");
+      console.log("added");
+
       navigate("/admin/dashboard");
     } catch (err) {
       const message = err?.response?.data?.error || "Something went wrong";

@@ -207,7 +207,7 @@ app.post("/cloudinarysave", isAdmin, async (req, res) => {
     method: "POST",
     body: req.body,
   });
-  res.status(200).json({ message: "Login success", url: response });
+  res.status(200).json({ message: " success", url: response });
 });
 
 app.get("/profile/:serial_no", async (req, res) => {
