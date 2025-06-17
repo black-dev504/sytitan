@@ -1,15 +1,17 @@
-import  { useEffect, useState } from 'react';
-import  { lazy, Suspense } from 'react';
-import { useAuth } from '../Authprovider';
-import { dogs as getSimilarDogs } from '../../auth';
-import Dogsskeleton from './Dogsskeleton';
+import { useEffect, useState } from "react";
+import { lazy, Suspense } from "react";
+import { useAuth } from "../Authprovider";
+import { dogs as getSimilarDogs } from "../../auth";
+import Dogsskeleton from "./Dogsskeleton";
 
 const Profile = () => {
-  const Dogcard = lazy(() => import('./landing/Dogcard'));
+  const Dogcard = lazy(() => import("./landing/Dogcard"));
   const { dog } = useAuth();
   const images = dog?.images || [];
-  const [displayImage, setDisplayImage] = useState(images[0] || '/images/noimgplaceholder.svg');
-  const [clicked, setClicked] = useState(images[0] || '');
+  const [displayImage, setDisplayImage] = useState(
+    images[0] || "/images/noimgplaceholder.svg"
+  );
+  const [clicked, setClicked] = useState(images[0] || "");
   const [similarDogs, setSimilarDogs] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,17 +26,48 @@ const Profile = () => {
   // Fetch similar dogs based on current dog's serial number
   useEffect(() => {
     const fetchSimilar = async () => {
+      const CACHE_KEY = `similar_dogs_${dog.serial_no}`;
+      const CACHE_TIME_MS = 1000 * 60 * 60 * 24; // 24 hours
+      const now = Date.now();
+
       try {
+        const cached = localStorage.getItem(CACHE_KEY);
+
+        if (cached) {
+          const parsed = JSON.parse(cached);
+
+          // If cache is still valid, use it
+          if (now - parsed.timestamp < CACHE_TIME_MS) {
+            setSimilarDogs(parsed.data);
+            setLoading(false);
+            return;
+          }
+        }
+
+        // Fetch from server if no cache or cache expired
         const response = await getSimilarDogs(dog.serial_no, 3);
-        setSimilarDogs(response.data.dogs);
+        const fetchedDogs = response.data.dogs;
+        setSimilarDogs(fetchedDogs);
+
+        // Save to cache
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({
+            timestamp: now,
+            data: fetchedDogs,
+          })
+        );
       } catch (err) {
-        console.error('Failed to fetch similar dogs:', err);
+        console.error("Failed to fetch similar dogs:", err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (dog?.serial_no) fetchSimilar();
+    if (dog?.serial_no) {
+      setLoading(true); // Only show loading if actually fetching
+      fetchSimilar();
+    }
   }, [dog?.serial_no]);
 
   // Handle image thumbnail click
@@ -51,11 +84,14 @@ const Profile = () => {
     <section>
       {/* Dog Profile Section */}
       <div className="container max-w-[1400px] mx-auto flex flex-col md:flex-row items-left lg:px-20 px-5 py-5 bg-[#252525] gap-10">
-
         {/* Image Display */}
         <div className="images flex lg:flex-row flex-col gap-5">
           <div className="main-img w-full lg:w-[400px] h-[400px] rounded-[20px] overflow-hidden">
-            <img src={displayImage} alt="Dog display" className="object-cover w-full h-full" />
+            <img
+              src={displayImage}
+              alt="Dog display"
+              className="object-cover w-full h-full"
+            />
           </div>
 
           {/* Thumbnail Images */}
@@ -64,9 +100,15 @@ const Profile = () => {
               <button
                 key={index}
                 onClick={() => handleImageClick(image)}
-                className={`sub-img border-2 ${clicked === image ? 'border-amber-500' : ''} rounded-[20px]`}
+                className={`sub-img border-2 ${
+                  clicked === image ? "border-amber-500" : ""
+                } rounded-[20px]`}
               >
-                <img src={image} alt={`Thumbnail ${index}`} className="object-cover w-full h-full rounded-[20px]" />
+                <img
+                  src={image}
+                  alt={`Thumbnail ${index}`}
+                  className="object-cover w-full h-full rounded-[20px]"
+                />
               </button>
             ))}
           </div>
@@ -91,41 +133,63 @@ const Profile = () => {
             )}
           </ProfileDetail>
 
-          <ProfileDetail label="Gender">{dog.gender || <NotAvailable />}</ProfileDetail>
-          <ProfileDetail label="Age">{dog.age || <NotAvailable />}</ProfileDetail>
-          <ProfileDetail label="Color">{dog.color || <NotAvailable />}</ProfileDetail>
-          <ProfileDetail label="Height">{dog.height || <NotAvailable />}</ProfileDetail>
-          <ProfileDetail label="Head size">{dog.headsize || <NotAvailable />}</ProfileDetail>
-          <ProfileDetail label="Class">{dog.class || <NotAvailable />}</ProfileDetail>
-          <ProfileDetail label="Status">{dog.status || <NotAvailable />}</ProfileDetail>
+          <ProfileDetail label="Gender">
+            {dog.gender || <NotAvailable />}
+          </ProfileDetail>
+          <ProfileDetail label="Age">
+            {dog.age || <NotAvailable />}
+          </ProfileDetail>
+          <ProfileDetail label="Color">
+            {dog.color || <NotAvailable />}
+          </ProfileDetail>
+          <ProfileDetail label="Height">
+            {dog.height || <NotAvailable />}
+          </ProfileDetail>
+          <ProfileDetail label="Head size">
+            {dog.headsize || <NotAvailable />}
+          </ProfileDetail>
+          <ProfileDetail label="Class">
+            {dog.class || <NotAvailable />}
+          </ProfileDetail>
+          <ProfileDetail label="Status">
+            {dog.status || <NotAvailable />}
+          </ProfileDetail>
           <ProfileDetail label="Registries">
-            {dog.registries && dog.registries.length > 0 ? dog.registries.join(', ') : <NotAvailable />}
+            {dog.registries && dog.registries.length > 0 ? (
+              dog.registries.join(", ")
+            ) : (
+              <NotAvailable />
+            )}
           </ProfileDetail>
         </div>
       </div>
 
       {/* Similar Dogs Section */}
       <div className="flex flex-col bg-[#131313] px-5 lg:px-20 py-10">
-        <h1 className="text-5xl text-[#ECECEC] font-semibold text-center py-12">SIMILAR BULLIES</h1>
+        <h1 className="text-5xl text-[#ECECEC] font-semibold text-center py-12">
+          SIMILAR BULLIES
+        </h1>
 
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 pt-8">
           {loading ? (
             <Dogsskeleton />
           ) : similarDogs.length > 0 ? (
             similarDogs.map((data, index) => (
-               <Suspense key={index} fallback={<Dogsskeleton />}>
-              <Dogcard
-                key={index}
-                name={data.name}
-                age={data.age}
-                status={data.status}
-                images={data.images}
-                serial_no={data.serial_no}
-              />
+              <Suspense key={index} fallback={<Dogsskeleton />}>
+                <Dogcard
+                  key={index}
+                  name={data.name}
+                  age={data.age}
+                  status={data.status}
+                  images={data.images}
+                  serial_no={data.serial_no}
+                />
               </Suspense>
             ))
           ) : (
-            <p className="text-white text-center col-span-full">No similar dogs found.</p>
+            <p className="text-white text-center col-span-full">
+              No similar dogs found.
+            </p>
           )}
         </div>
       </div>

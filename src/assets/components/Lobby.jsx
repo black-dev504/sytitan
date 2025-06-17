@@ -1,28 +1,56 @@
-import { useState, useEffect } from 'react';
-import Dogcard from './landing/Dogcard';
-import { getDogs as dogData } from '../../auth';
-import Dogsskeleton from './Dogsskeleton';
+import { useState, useEffect } from "react";
+import Dogcard from "./landing/Dogcard";
+import { getDogs as dogData } from "../../auth";
+import Dogsskeleton from "./Dogsskeleton";
 
 const Lobby = () => {
   // Filter categories
-  const filters = ['ALL', 'STUDS', 'BITCHES', 'PUPPIES', 'UPCOMING'];
+  const filters = ["ALL", "STUDS", "BITCHES", "PUPPIES", "UPCOMING"];
 
   // State for selected filter
-  const [activeFilter, setActiveFilter] = useState('ALL');
+  const [activeFilter, setActiveFilter] = useState("ALL");
 
   // Dogs data, loading & error state
   const [dogs, setDogs] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
+
+  const CACHE_KEY = "dogs_ALL";
+  const CACHE_TIME_MS = 1000 * 60 * 60 * 24;
 
   // Fetch initial list of dogs (defaults to ALL)
   useEffect(() => {
     const fetchDogs = async () => {
       try {
-        const response = await dogData('ALL');
-        setDogs(response.data.dog);
+        const cached = localStorage.getItem(CACHE_KEY);
+        console.log("Cached dogs:", cached);
+        if (cached) {
+          const parsed = JSON.parse(cached);
+          const now = Date.now();
+
+          // If cache is fresh, use it
+          if (now - parsed.timestamp < CACHE_TIME_MS) {
+            setDogs(parsed.data);
+            setLoading(false);
+            return;
+          }
+        }
+
+        const response = await dogData("ALL");
+        const fetchedDogs = response.data.dog;
+
+        setDogs(fetchedDogs);
+        console.log("Fetched dogs:", fetchedDogs);
+
+        localStorage.setItem(
+          CACHE_KEY,
+          JSON.stringify({
+            timestamp: Date.now(),
+            data: fetchedDogs,
+          })
+        );
       } catch (err) {
-        console.error('Failed to fetch dogs:', err);
+        console.error("Failed to fetch dogs:", err);
       } finally {
         setLoading(false);
       }
@@ -35,18 +63,47 @@ const Lobby = () => {
   const handleClick = async (filter) => {
     setActiveFilter(filter);
     setLoading(true);
+
+    const cacheKey = `dogs_${filter}`;
+    const cacheTimeKey = `dogs_time_${filter}`;
+
     try {
+      const cached = localStorage.getItem(cacheKey);
+      const now = Date.now();
+
+      if (cached) {
+        // Use cached data
+        const parsed = JSON.parse(cached);
+        if (now - parsed.timestamp < CACHE_TIME_MS) {
+          setDogs(parsed.data);
+          setLoading(false);
+          setError("");
+          return;
+        }
+        return;
+      }
+      // Fetch new data
       const response = await dogData(filter);
-      setDogs(response.data.dog);
-      setError('');
+      const fetchedDogs = response.data.dog;
+      setDogs(fetchedDogs);
+      setError("");
+
+      // Save to cache
+      localStorage.setItem(
+        cacheKey,
+        JSON.stringify({
+          timestamp: Date.now(),
+          data: fetchedDogs,
+        })
+      );
+      console.log(cacheKey);
     } catch (err) {
-      const errMsg = err?.response?.data?.error || 'Failed to fetch dogs';
+      const errMsg = err?.response?.data?.error || "Failed to fetch dogs";
       setError(errMsg);
     } finally {
       setLoading(false);
     }
   };
-
   return (
     <section>
       {/* Header background section */}
@@ -99,8 +156,6 @@ const Lobby = () => {
             </h1>
           )}
         </div>
-
-    
       </section>
     </section>
   );
@@ -112,9 +167,7 @@ const FilterButton = ({ text, isSelected, onClick }) => {
     <button
       onClick={onClick}
       className={`py-5 px-9 cursor-pointer text-[#FFAC38] rounded-[40px] ${
-        isSelected
-          ? 'bg-[#FFAC38] text-white'
-          : 'border-2 border-[#FFAC38]'
+        isSelected ? "bg-[#FFAC38] text-white" : "border-2 border-[#FFAC38]"
       }`}
     >
       {text}

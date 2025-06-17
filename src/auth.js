@@ -1,10 +1,12 @@
 import axios from "axios";
 
 const api = axios.create({
-  baseURL: "https://sytitan.onrender.com",
+  baseURL:
+    import.meta.env.MODE === "development"
+      ? "http://localhost:5000" // your local backend
+      : "https://sytitan.onrender.com", // your production backend
   withCredentials: true,
 });
-
 export const contact = async (credentials) => {
   return await api.post("/contact", credentials);
 };
