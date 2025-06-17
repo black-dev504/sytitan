@@ -2,7 +2,7 @@ import axios from "axios";
 
 const api = axios.create({
   baseURL: "https://sytitan.onrender.com",
-  withCredentials: true, // 👈 include cookies with requests
+  withCredentials: true,
 });
 
 export const contact = async (credentials) => {
@@ -25,10 +25,13 @@ export const adminLogin = async (credentials) => {
   return await api.post("/admin/dashboard/login", credentials);
 };
 
-export const cloudinary = async (credentials) => {
-  return await api.post("/cloudinarysave", credentials);
+export const cloudinary = async (formData) => {
+  return await api.post("/cloudinarysave", formData, {
+    headers: {
+      "Content-Type": "multipart/form-data",
+    },
+  });
 };
-
 export const profile = async (serial_no) => {
   return await api.get(`/profile/${serial_no}`);
 };

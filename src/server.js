@@ -203,10 +203,11 @@ app.post(
 );
 
 app.post("/cloudinarysave", isAdmin, async (req, res) => {
-  const response = await fetch(process.env.CLOUDINARY_URL, {
+  const response = await fetch(process.env.VITE_CLOUDINARY_URL, {
     method: "POST",
     body: req.body,
   });
+
   res.status(200).json({ message: " success", url: response });
 });
 
