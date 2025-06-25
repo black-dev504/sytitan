@@ -129,15 +129,27 @@ const Add = () => {
     try {
       setLoading(true);
 
-      const uploadPromises = images.map(async (image) => {
-        const data = new FormData();
-        data.append("file", image);
-        data.append("upload_preset", "sytitan-preset");
-        const response = await addImage(data);
-        return response.data.secure_url;
-      });
+      let uploadedImageUrls = [];
 
-      const uploadedImageUrls = await Promise.all(uploadPromises);
+      // Separate try-catch block for image upload
+      try {
+        const uploadPromises = images.map(async (image) => {
+          const data = new FormData();
+          data.append("file", image);
+          data.append("upload_preset", "sytitan-preset");
+          const response = await addImage(data);
+          return response.data.secure_url;
+        });
+
+        uploadedImageUrls = await Promise.all(uploadPromises);
+      } catch (uploadError) {
+        console.error("Image upload error:", uploadError);
+        setMssg(
+          "Image upload failed. Please check your internet and try again."
+        );
+        setLoading(false);
+        return; // Prevent submission if upload fails
+      }
 
       const newDog = {
         ...form,
@@ -169,7 +181,7 @@ const Add = () => {
       const message = err?.response?.data?.error || "Something went wrong";
       setMssg(message);
       setLoading(false);
-      console.error(message);
+      console.error("Form submission error:", message);
     }
   };
 
