@@ -16,7 +16,7 @@ const Lobby = () => {
   const [loading, setLoading] = useState(true);
 
   const CACHE_KEY = "dogs_ALL";
-  const CACHE_TIME_MS = 1000 * 60 * 60 * 24;
+  const CACHE_TIME_MS = 1000 * 60 * 60 * 1;
 
   // Fetch initial list of dogs (defaults to ALL)
   useEffect(() => {

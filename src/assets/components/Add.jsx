@@ -123,12 +123,35 @@ const Add = () => {
     setImgError("");
   };
 
+  const uploadToCloudinary = async (file) => {
+  const url = import.meta.env.VITE_CLOUDINARY_URL;
+
+  const formData = new FormData();
+  formData.append("file", file);
+  formData.append("upload_preset", "sytitan-preset");
+
+  const response = await fetch(url, {
+    method: "POST",
+    body: formData,
+  });
+
+  if (!response.ok) {
+    throw new Error("Cloudinary upload failed");
+  }
+
+  const data = await response.json();
+  return data.secure_url;
+};
+
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (loading) return;
 
     if (tags.length === 0) {
       setMssg("Please add at least one tag.");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+
       return;
     }
 
@@ -137,18 +160,13 @@ const Add = () => {
       let uploadedImageUrls = [];
 
       try {
-        const uploadPromises = images.map(async ({ file }) => {
-          const data = new FormData();
-          data.append("file", file);
-          data.append("upload_preset", "sytitan-preset");
-          const response = await addImage(data);
-          return response.data.secure_url;
-        });
-
+       const uploadPromises = images.map(({ file }) => uploadToCloudinary(file));
         uploadedImageUrls = await Promise.all(uploadPromises);
+        setImages(uploadedImageUrls)
       } catch (uploadError) {
         console.error("Image upload error:", uploadError);
         setMssg("Image upload failed. Please check your internet and try again.");
+        window.scrollTo({ top: 0, behavior: "smooth" });
         setLoading(false);
         return;
       }
@@ -177,6 +195,7 @@ const Add = () => {
       const message = err?.response?.data?.error || "Something went wrong";
       setMssg(message);
       setLoading(false);
+      window.scrollTo({ top: 0, behavior: "smooth" });
       console.error("Form submission error:", message);
     }
   };
@@ -408,9 +427,9 @@ const Add = () => {
               className="max-w-[200px] max-h-[200px] relative inline-block mr-2 mt-2"
             >
               <img
-                src={image}
+                src={image.url}
                 alt={`preview-${index}`}
-                className="max-w-[200px] object-cover max-h-[200px]"
+                className=" object-contain overflow-hidden "
               />
               <div className="bg-white hover:bg-red-500 absolute left-[80%] mt-1 mr-2 top-0 rounded-full">
                 <button

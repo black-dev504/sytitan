@@ -27,7 +27,7 @@ const Profile = () => {
   useEffect(() => {
     const fetchSimilar = async () => {
       const CACHE_KEY = `similar_dogs_${dog.serial_no}`;
-      const CACHE_TIME_MS = 1000 * 60 * 60 * 24; // 24 hours
+      const CACHE_TIME_MS = 1000 * 60 * 60 * 1; 
       const now = Date.now();
 
       try {
