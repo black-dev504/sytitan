@@ -24,6 +24,7 @@ const Lobby = () => {
       try {
         const cached = localStorage.getItem(CACHE_KEY);
         console.log("Cached dogs:", cached);
+        
         if (cached) {
           const parsed = JSON.parse(cached);
           const now = Date.now();
@@ -36,12 +37,14 @@ const Lobby = () => {
           }
         }
 
+        // Fetch fresh data if cache is invalid or missing
         const response = await dogData("ALL");
         const fetchedDogs = response.data.dog;
 
         setDogs(fetchedDogs);
         console.log("Fetched dogs:", fetchedDogs);
 
+        // Cache the fetched data
         localStorage.setItem(
           CACHE_KEY,
           JSON.stringify({
@@ -51,6 +54,7 @@ const Lobby = () => {
         );
       } catch (err) {
         console.error("Failed to fetch dogs:", err);
+        setError("Failed to fetch dogs.");
       } finally {
         setLoading(false);
       }
@@ -65,7 +69,6 @@ const Lobby = () => {
     setLoading(true);
 
     const cacheKey = `dogs_${filter}`;
-    const cacheTimeKey = `dogs_time_${filter}`;
 
     try {
       const cached = localStorage.getItem(cacheKey);
@@ -80,9 +83,9 @@ const Lobby = () => {
           setError("");
           return;
         }
-        return;
       }
-      // Fetch new data
+
+      // Fetch new data if no valid cache or cache expired
       const response = await dogData(filter);
       const fetchedDogs = response.data.dog;
       setDogs(fetchedDogs);
@@ -96,7 +99,6 @@ const Lobby = () => {
           data: fetchedDogs,
         })
       );
-      console.log(cacheKey);
     } catch (err) {
       const errMsg = err?.response?.data?.error || "Failed to fetch dogs";
       setError(errMsg);
@@ -104,6 +106,14 @@ const Lobby = () => {
       setLoading(false);
     }
   };
+
+  // No results component
+  const NoResults = () => (
+    <div className="text-white font-bold text-3xl">
+      No dogs available for this filter
+    </div>
+  );
+
   return (
     <section>
       {/* Header background section */}
@@ -151,9 +161,7 @@ const Lobby = () => {
           ) : error ? (
             <h1 className="text-red-500 text-lg">{error}</h1>
           ) : (
-            <h1 className="text-white font-bold text-3xl">
-              No dogs available for this filter
-            </h1>
+            <NoResults />
           )}
         </div>
       </section>
