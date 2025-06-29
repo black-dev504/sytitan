@@ -146,7 +146,7 @@ const Profile = () => {
             {dog.height || <NotAvailable />}
           </ProfileDetail>
           <ProfileDetail label="Head size">
-            {dog.headsize || <NotAvailable />}
+            {dog.headSize || <NotAvailable />}
           </ProfileDetail>
           <ProfileDetail label="Class">
             {dog.class || <NotAvailable />}
