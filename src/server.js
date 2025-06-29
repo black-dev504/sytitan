@@ -188,6 +188,8 @@ app.post("/admin/dashboard", isAdmin, async (req, res) => {
     const dog = new Dog(req.body);
 
     const newDog = await dog.save();
+    await AppMeta.updateOne({}, { $set: { dogsLastUpdated: Date.now() } }, { upsert: true });
+
     res.status(200).json({ message: "successful", newDog });
   } catch (err) {
     res.status(500).json({ error: err.message });

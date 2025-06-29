@@ -402,7 +402,7 @@ const Add = () => {
         </div>
 
         <div>
-          {previewImages.map((image, index) => (
+          {images.map((image, index) => (
             <div
               key={index}
               className="max-w-[200px] max-h-[200px] relative inline-block mr-2 mt-2"
