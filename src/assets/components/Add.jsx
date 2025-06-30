@@ -124,7 +124,7 @@ const Add = () => {
   };
 
   const uploadToCloudinary = async (file) => {
-  const url = import.meta.env.VITE_CLOUDINARY_URL;
+  const url = "https://api.cloudinary.com/v1_1/dtlwdfpjb/image/upload";
 
   const formData = new FormData();
   formData.append("file", file);
@@ -135,6 +135,7 @@ const Add = () => {
     body: formData,
   });
 
+    
   if (!response.ok) {
     throw new Error("Cloudinary upload failed");
   }
@@ -181,6 +182,7 @@ const Add = () => {
       await addDog(newDog);
 
       setMssg(`Successfully added ${form.name}`);
+
       localStorage.removeItem("add-dog-form");
       localStorage.removeItem("add-dog-tags");
       localStorage.removeItem("add-dog-registries");
