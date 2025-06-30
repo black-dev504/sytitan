@@ -125,10 +125,10 @@ const Add = () => {
 
   const uploadToCloudinary = async (file) => {
   const url = "https://api.cloudinary.com/v1_1/dtlwdfpjb/image/upload";
-
+  
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", "sytitan-preset");
+  formData.append("upload_preset", "dogs-preset");
 
   const response = await fetch(url, {
     method: "POST",
