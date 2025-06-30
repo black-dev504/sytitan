@@ -64,6 +64,12 @@ const Add = () => {
     };
   }, [images]);
 
+  const throwError = (mssg) => {
+    setMssg(mssg)
+    window.scrollTo({ top: 0, behavior: "smooth" });
+
+  }
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     const upperCaseFields = [
@@ -124,11 +130,11 @@ const Add = () => {
   };
 
   const uploadToCloudinary = async (file) => {
-  const url = "https://api.cloudinary.com/v1_1/dtlwdfpjb/image/upload";
-  
+  const url = import.meta.env.VITE_CLOUDINARY_URL;
+
   const formData = new FormData();
   formData.append("file", file);
-  formData.append("upload_preset", "dogs-preset");
+  formData.append("upload_preset", "sytitan-preset");
 
   const response = await fetch(url, {
     method: "POST",
@@ -150,9 +156,7 @@ const Add = () => {
     if (loading) return;
 
     if (tags.length === 0) {
-      setMssg("Please add at least one tag.");
-      window.scrollTo({ top: 0, behavior: "smooth" });
-
+      throwError("Please add at least one tag.");
       return;
     }
 
@@ -166,8 +170,7 @@ const Add = () => {
         setImages(uploadedImageUrls)
       } catch (uploadError) {
         console.error("Image upload error:", uploadError);
-        setMssg("Image upload failed. Please check your internet and try again.");
-        window.scrollTo({ top: 0, behavior: "smooth" });
+        throwError("Image upload failed. Please check your internet and try again.");
         setLoading(false);
         return;
       }
@@ -195,9 +198,8 @@ const Add = () => {
       navigate("/admin/dashboard");
     } catch (err) {
       const message = err?.response?.data?.error || "Something went wrong";
-      setMssg(message);
+      throwError(message);
       setLoading(false);
-      window.scrollTo({ top: 0, behavior: "smooth" });
       console.error("Form submission error:", message);
     }
   };
