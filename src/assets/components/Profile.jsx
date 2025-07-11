@@ -3,6 +3,7 @@ import { lazy, Suspense } from "react";
 import { useAuth } from "../Authprovider";
 import { dogs as getSimilarDogs } from "../../auth";
 import Dogsskeleton from "./Dogsskeleton";
+import ProfileSkeleton from "./Profileskeleton";
 
 const Profile = () => {
   const Dogcard = lazy(() => import("./landing/Dogcard"));
@@ -77,16 +78,16 @@ const Profile = () => {
   };
 
   if (!dog) {
-    return <div className="text-center text-white">Loading...</div>;
+    return <div className="text-center text-white"><ProfileSkeleton /></div>;
   }
 
   return (
     <section>
       {/* Dog Profile Section */}
-      <div className="container max-w-[1400px] mx-auto flex flex-col md:flex-row items-left lg:px-20 px-5 py-5 bg-[#252525] gap-10">
+      <div className="container max-w-[1800px] mx-auto flex flex-col md:flex-row items-left lg:px-20 px-5 py-5 bg-[#252525] gap-10">
         {/* Image Display */}
         <div className="images flex lg:flex-row flex-col gap-5">
-          <div className="main-img w-full lg:w-[400px] h-[400px] rounded-[20px] overflow-hidden">
+          <div className="main-img w-full lg:w-[500px] h-[500px] rounded-[20px] overflow-hidden">
             <img
               src={displayImage}
               alt="Dog display"
@@ -94,7 +95,7 @@ const Profile = () => {
             />
           </div>
 
-          {/* Thumbnail Images */}
+          {/* Thumbnail Image */}
           <div className="sub-imgs flex flex-row lg:flex-col gap-4">
             {images.map((image, index) => (
               <button
@@ -115,7 +116,7 @@ const Profile = () => {
         </div>
 
         {/* Dog Info */}
-        <div className="details flex flex-col justify-start text-white text-xl">
+        <div className="details md:ml-10 lg:ml-0 flex flex-col justify-start text-white text-xl">
           <h1 className="text-primary font-bold text-[40px]">{dog.name}</h1>
 
           <ProfileDetail label="Pedigree">
@@ -161,6 +162,10 @@ const Profile = () => {
               <NotAvailable />
             )}
           </ProfileDetail>
+
+           <ProfileDetail label="Description">
+            {dog.description || <NotAvailable />}
+          </ProfileDetail>
         </div>
       </div>
 
@@ -200,8 +205,8 @@ const Profile = () => {
 // Reusable detail line with label and value
 const ProfileDetail = ({ label, children }) => (
   <div className="flex py-1 gap-6">
-    <span className="font-bold">{label}</span>
-    <span>{children}</span>
+    <span className="font-bold min-w-[120px]">{label}</span>
+    <span className="break-words">{children}</span>
   </div>
 );
 

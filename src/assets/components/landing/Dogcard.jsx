@@ -38,7 +38,7 @@ const Dogcard = ({ images, name, age, color, serial_no }) => {
       </div>
 
       {/* Dog Info */}
-      <div className="flex flex-col pl-3 py-5">
+      <div className="flex flex-col pl-10 py-5">
         <h2 className="my-2 font-bold text-[#ECECEC] text-[20px]">
           <span className="text-white">{name || 'Unnamed'}</span>
         </h2>
@@ -63,7 +63,7 @@ const Dogcard = ({ images, name, age, color, serial_no }) => {
       {/* Profile Button */}
       <button
         onClick={handleClick}
-        className="cursor-pointer border border-[#FFAC38] text-[#FFAC38] hover:bg-primary hover:text-white font-medium text-[16px] rounded-[40px] ml-3 mb-5 py-4 px-5 max-w-[170px]"
+        className="cursor-pointer border border-[#FFAC38] text-[#FFAC38] hover:bg-primary hover:text-white font-medium text-[16px] rounded-[40px] ml-8 mb-5 py-4 px-5 max-w-[170px]"
       >
         Open Profile
       </button>

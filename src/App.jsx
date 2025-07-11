@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import React from 'react';
+import 'tw-elements';
 import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import Header from './assets/components/Header'
 import Home from './assets/components/landing/Home'
@@ -17,7 +18,7 @@ import Footer from './assets/components/Footer';
 function App() {
 
   return (
-    <div className="primary-font w-full mx-auto overflow-hidden">
+    <div className="primary-font bg-black w-full mx-auto overflow-hidden">
         <Router>
         <ScrollToTop />
       <Header />

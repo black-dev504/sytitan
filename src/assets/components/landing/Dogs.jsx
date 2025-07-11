@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Dogsskeleton from "../Dogsskeleton";
 
 const CACHE_KEY = "cachedDogs";
-const CACHE_TIME_MS = 1000 * 60 * 60 * 24;
+const CACHE_TIME_MS = 1000 * 60 * 60 * 0;
 
 const Dogs = () => {
   const navigate = useNavigate();
@@ -17,7 +17,7 @@ const Dogs = () => {
       try {
         const cached = localStorage.getItem(CACHE_KEY);
 
-        if (cached) {
+        if (cached && !cached.data) {
           const parsed = JSON.parse(cached);
           const now = Date.now();
 
