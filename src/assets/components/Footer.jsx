@@ -15,17 +15,17 @@ const Footer = () => {
 
     {/* Center - Navigation Links */}
     <div className="flex gap-6 text-sm">
-      <a href="#" className="hover:text-white">Home</a>
-      <a href="#" className="hover:text-white">About</a>
-      <a href="#" className="hover:text-white">Contact</a>
-      <a href="#" className="hover:text-white">Privacy</a>
+      <a href="/" className="hover:text-white">Home</a>
+      <a href="/about" className="hover:text-white">About</a>
+      <a href="/contact" className="hover:text-white">Contact</a>
+      <a href="/privacy" className="hover:text-white">Privacy</a>
     </div>
 
     {/* Right Side - Socials */}
     <div className="flex gap-4"> 
-      <a href="#" className="hover:text-white">Twitter</a>
-      <a href="#" className="hover:text-white">Instagram</a>
-      <a href="#" className="hover:text-white">LinkedIn</a>
+      <a href="https://www.instagram.com/sy_titan?igsh=MTdzcDR6bWwxeng2aA==" target="_blank" rel="noopener noreferrer" className="hover:text-white">Instagram</a>
+      <a href="https://www.facebook.com/share/198j9aDnkT/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer" className="hover:text-white">Facebook</a>
+      <a href="https://www.tiktok.com/@sytitan?_t=ZM-8xwGQQ0YMdB&_r=1" target="_blank" rel="noopener noreferrer" className="hover:text-white">Tik Tok</a>
     </div>
   </div>
 </footer>

@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import Dogsskeleton from "../Dogsskeleton";
 
 const CACHE_KEY = "cachedDogs";
-const CACHE_TIME_MS = 1000 * 60 * 60 * 0;
+const CACHE_TIME_MS = 1000 * 60 * 60 * 24;
 
 const Dogs = () => {
   const navigate = useNavigate();

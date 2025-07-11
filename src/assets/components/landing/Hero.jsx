@@ -18,13 +18,13 @@ const navigate = useNavigate();
 
           <div className='flex gap-12'>
             <div className="flex flex-col justify-start">
-              <h1 className='text-3xl font-semibold text-white'>10+</h1>
+              <h1 className='text-3xl font-semibold text-white'>6+</h1>
               <div className='my-2 w-16 h-[3px] bg-white'></div>
               <p>Years of Breeding Experience</p>
             </div>
 
             <div className="flex flex-col justify-start">
-              <h1 className='text-3xl font-semibold text-white'>60+</h1>
+              <h1 className='text-3xl font-semibold text-white'>50+</h1>
               <div className='my-2 w-16 h-[3px] bg-white'></div>
               <p>Puppies Raised in Loving Homes</p>
             </div>

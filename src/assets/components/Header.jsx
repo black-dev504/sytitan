@@ -1,7 +1,8 @@
 import {useState} from 'react'
-
+import { useNavigate } from 'react-router-dom'
 const Header = () => {
 const [isMenuOpen, setIsMenuOpen] = useState(false)
+  const navigate = useNavigate();
 
 
   return (
@@ -10,10 +11,10 @@ const [isMenuOpen, setIsMenuOpen] = useState(false)
             <img src="/icons/logo.svg" alt="logo" />
 
             <ul className=' hidden md:flex items-center gap-10 justify-between'>
-                <li className='hover:underline hover:text-blue-500 cursor-pointer'><a href="/"></a>Home</li>
-                <li className='hover:underline hover:text-blue-500  cursor-pointer ' ><a href="/"></a>About us</li>
-                <li className='hover:underline hover:text-blue-500 cursor-pointer '><a href="/"></a>Our program</li>
-                <li className='hover:underline hover:text-blue-500  cursor-pointer text-[#FFAC38]'><a href="/contact"></a>Contact Us</li>
+                <li className='hover:underline hover:text-blue-500 cursor-pointer'><a href="/">Home</a></li>
+                <li className='hover:underline hover:text-blue-500  cursor-pointer ' ><a href="/about">About us</a></li>
+                <li className='hover:underline hover:text-blue-500 cursor-pointer '><a href="/">Our program</a></li>
+                <li className='hover:underline hover:text-blue-500  cursor-pointer text-[#FFAC38]'><a href="/contact">Contact Us</a></li>
             </ul>
 
         {

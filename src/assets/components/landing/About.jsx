@@ -17,7 +17,7 @@ const About = () => {
     </div>
 
     {/* Image Grid */}
-    <div className='overflow-y-visible flex flex-col my-16 md:mt-0'>
+    <div className='overflow-y-visible flex flex-col lg:my-16 md:mt-0'>
       <div className='grid grid-cols-2 items-baseline mb-4 gap-4'>
         <img src='/images/journeypic1.jpeg' alt="" />
         <img src='/images/journeypic2.jpeg' alt="" />

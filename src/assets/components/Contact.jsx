@@ -53,7 +53,8 @@ const Contact = () => {
             <div className="flex space-x-6 mb-6">
               <div className="w-1/2">
                 <label htmlFor="first-name" className="block text-gray-500 text-[14px] mb-2">First Name</label>
-                <input
+                 <input 
+                 required
                   type="text"
                   name="first_name"
                   id="first-name"
@@ -66,7 +67,8 @@ const Contact = () => {
 
               <div className="w-1/2">
                 <label htmlFor="last-name" className="block text-gray-500 text-[14px] mb-2">Last Name</label>
-                <input
+                 <input 
+                 required
                   type="text"
                   name="last_name"
                   id="last-name"
@@ -80,7 +82,8 @@ const Contact = () => {
 
             <div className="mb-6">
               <label htmlFor="email" className="block text-gray-500 text-[14px] mb-2">Email</label>
-              <input
+               <input 
+               required
                 type="email"
                 name="user_email"
                 id="email"
@@ -93,8 +96,9 @@ const Contact = () => {
 
             <div className="mb-6">
               <label htmlFor="phone" className="block text-gray-500 text-[14px] mb-2">Phone number</label>
-              <input
-                type="text"
+               <input 
+               required
+                type="number"
                 name="phone_no"
                 id="phone"
                 placeholder="0000-0000"
@@ -118,7 +122,8 @@ const Contact = () => {
             </div>
 
             <div>
-              <input type="checkbox" id="checkbox" />
+               <input 
+               required type="checkbox" id="checkbox" />
               <label htmlFor="checkbox" className="text-gray-500 text-[14px] ml-2">
                 You agree to our friendly <span className='text-[#1C3FAA]'>Privacy policy.</span>
               </label>
