@@ -39,6 +39,17 @@ export const profile = async (serial_no) => {
   return await api.get(`/profile/${serial_no}`);
 };
 
+export const destroy = async (serial_no) => {
+  return await api.delete(`profile/${serial_no}`);
+};
+
+
 export const dogs = async (id, limit) => {
   return await api.get(`/dogs/${id}/${limit}`);
 };
+
+export const sendEmail = async (payload) => {
+  return await api.post("/send-email", payload);
+};
+
+

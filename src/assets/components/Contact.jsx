@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { contact as sendMessage } from '../../auth';
+import { sendEmail } from '../../auth';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -25,17 +26,25 @@ const Contact = () => {
     e.preventDefault();
     
     try {
-      const res = await sendMessage(formData);
-      console.log('Message sent:', res.data);
-
-      setFormData({
+   
+    const response = await sendEmail({
+      email: FormData['user_email'],
+      subject: "Welcome to SY TITAN",
+      message: "Thanks for getting in touch with us!",
+    });
+    alert("Email sent!");
+       setFormData({
         first_name: '',
         last_name: '',
         user_email: '',
         phone_no: '',
         message: ''
       });
-    } catch (err) {
+      console.log(response);
+      
+  } 
+   
+     catch (err) {
       console.error('Failed to send message:', err);
     }
   };

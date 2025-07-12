@@ -1,5 +1,6 @@
 import { useState } from "react";
 import AddForm from "./AddDogForm";
+import DeleteForm from "./DeleteForm";
 
 const Add = () => {
   const [activeTab, setActiveTab] = useState("addForm");
@@ -23,7 +24,7 @@ const Add = () => {
           </li>
           <li className="w-1/2">
             <button
-              onClick={() => setActiveTab("sayHi")}
+              onClick={() => setActiveTab("deleteForm")}
               className={`ml-2 px-4 py-2 w-full rounded-t-md focus:outline-none ${
                 activeTab === "deleteForm"
                   ? "bg-blue-600 text-white"
@@ -43,8 +44,9 @@ const Add = () => {
             </div>
           )}
           {activeTab === "deleteForm" && (
-            <div className="text-black">
-              <h1>Delete Dog </h1>
+                      <div className="overflow-x-auto scrollbar">
+
+              <DeleteForm />
             </div>
           )}
         </div>

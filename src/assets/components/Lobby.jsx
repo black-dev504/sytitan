@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import Dogcard from "./landing/Dogcard";
 import { getDogs as dogData } from "../../auth";
 import Dogsskeleton from "./Dogsskeleton";
+import Heading from './Heading';
 
 const Lobby = () => {
   // Filter categories
@@ -117,16 +118,7 @@ const Lobby = () => {
   return (
     <section>
       {/* Header background section */}
-      <div className="relative h-96 w-full flex items-center justify-center overflow-hidden">
-        <img
-          src="/images/lobbypic.png"
-          alt="Lobby background"
-          className="absolute top-0 left-0 w-full h-full object-cover z-0"
-        />
-        <h1 className="text-5xl relative text-[#ECECEC] font-semibold text-center py-12">
-          MEET THE BULLIES
-        </h1>
-      </div>
+      <Heading image='/images/lobbypic.png' title='MEET THE BULLIES' />
 
       {/* Filter buttons */}
       <div className="px-5 lg:px-20 bg-[#252525] py-12">

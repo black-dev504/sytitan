@@ -1,7 +1,7 @@
 import Hero from './Hero'
 import Cards from './Cards'
 import Dogs from './Dogs'
-import About from './About'
+import Journey from './Journey'
 
 const Home = () => {
   return (
@@ -9,7 +9,7 @@ const Home = () => {
      <Hero />
       <Cards />
       <Dogs />
-      <About />
+      <Journey />
    </section>
   )
 }

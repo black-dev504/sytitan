@@ -13,7 +13,7 @@ import Lobby from './assets/components/Lobby';
 import ScrollToTop from './assets/components/scrollToTop';
 import Profile from './assets/components/Profile';
 import Footer from './assets/components/Footer';
-
+import About from './assets/components/About';
 
 function App() {
 
@@ -30,6 +30,7 @@ function App() {
           <Route path='/admin/dashboard' element={ <ProtectedRoute> <Add /> </ProtectedRoute>  }/>
           <Route path="/lobby" element={ <Lobby />  } />
           <Route path="/profile" element={ <Profile /> } />
+          <Route path="/about" element={ <About /> } />
 
 
       </Routes>

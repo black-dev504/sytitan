@@ -1,6 +1,6 @@
 import React from 'react'
 
-const About = () => {
+const Journey = () => {
   return (
    <section className='bg-secondary'>
   <div className="grid grid-cols-1 lg:grid-cols-2  py-15 gap-20 ml-5 lg:ml-25 items-center">
@@ -34,4 +34,4 @@ const About = () => {
   )
 }
 
-export default About
+export default Journey

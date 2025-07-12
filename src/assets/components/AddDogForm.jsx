@@ -122,11 +122,16 @@ const AddForm = () => {
 
     setImages((prev) => [...prev, ...newImages]);
     setImgError("");
+    console.log(images);
+    
+
   };
 
   const handleRemove = (url) => {
     setImages((prev) => prev.filter((img) => img.url !== url));
     setImgError("");
+  
+    
   };
 
   const uploadToCloudinary = async (file) => {
@@ -147,62 +152,75 @@ const AddForm = () => {
   }
 
   const data = await response.json();
-  return data.secure_url;
+  console.log(data);
+  
+  return data;
 };
 
+const handleSubmit = async (e) => {
+  e.preventDefault();
+  if (loading) return;
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (loading) return;
+  if (tags.length === 0) {
+    throwError("Please add at least one tag.");
+    return;
+  }
 
-    if (tags.length === 0) {
-      throwError("Please add at least one tag.");
+  try {
+    setLoading(true);
+    let uploadedImages = [];
+
+    try {
+      const uploadPromises = images.map(({ file }) => uploadToCloudinary(file));
+      uploadedImages = await Promise.all(uploadPromises);
+
+      const imageData = uploadedImages.map(res => ({
+        url: res.secure_url,
+        public_id: res.public_id,
+      }));
+
+      setImages(imageData); // optional — only needed if UI needs preview
+    } catch (uploadError) {
+      console.error("Image upload error:", uploadError);
+      throwError("Image upload failed. Please check your internet and try again.");
+      setLoading(false);
       return;
     }
 
-    try {
-      setLoading(true);
-      let uploadedImageUrls = [];
+    // 👇 Submit the actual uploaded image data
+    const newDog = {
+      ...form,
+      tags,
+      registries,
+      images: uploadedImages.map(res => ({
+        url: res.secure_url,
+        public_id: res.public_id,
+      })),
+    };
 
-      try {
-       const uploadPromises = images.map(({ file }) => uploadToCloudinary(file));
-        uploadedImageUrls = await Promise.all(uploadPromises);
-        setImages(uploadedImageUrls)
-      } catch (uploadError) {
-        console.error("Image upload error:", uploadError);
-        throwError("Image upload failed. Please check your internet and try again.");
-        setLoading(false);
-        return;
-      }
+    await addDog(newDog);
 
-      const newDog = {
-        ...form,
-        tags,
-        registries,
-        images: uploadedImageUrls,
-      };
+    setMssg(`Successfully added ${form.name}`);
 
-      await addDog(newDog);
+    // Clean up
+    localStorage.removeItem("add-dog-form");
+    localStorage.removeItem("add-dog-tags");
+    localStorage.removeItem("add-dog-registries");
+    setForm(initialForm);
+    setTags([]);
+    setRegistries([]);
+    setImages([]);
+    setImgError("");
+    setLoading(false);
+    navigate("/admin/dashboard");
+  } catch (err) {
+    const message = err?.response?.data?.error || "Something went wrong";
+    throwError(message);
+    setLoading(false);
+    console.error("Form submission error:", message);
+  }
+};
 
-      setMssg(`Successfully added ${form.name}`);
-
-      localStorage.removeItem("add-dog-form");
-      localStorage.removeItem("add-dog-tags");
-      localStorage.removeItem("add-dog-registries");
-      setForm(initialForm);
-      setTags([]);
-      setRegistries([]);
-      setImages([]);
-      setImgError("");
-      setLoading(false);
-      navigate("/admin/dashboard");
-    } catch (err) {
-      const message = err?.response?.data?.error || "Something went wrong";
-      throwError(message);
-      setLoading(false);
-      console.error("Form submission error:", message);
-    }
-  };
 
   if (!user) {
     return <h1 className="text-5xl font-black">Please login to access this page</h1>;
@@ -343,18 +361,18 @@ const AddForm = () => {
           {images.map((image, index) => (
             <div
               key={index}
-              className="max-w-[200px] max-h-[200px] relative inline-block mr-2 mt-2"
+              className="max-w-[200px] max-h-[200px] overflow-hidden relative inline-block mr-2 mt-2"
             >
               <img
                 src={image.url}
                 alt={`preview-${index}`}
-                className=" object-contain overflow-hidden "
+                className=" object-contain mb-5 overflow-hidden "
               />
               <div className="bg-white hover:bg-red-500 absolute left-[80%] mt-1 mr-2 top-0 rounded-full">
                 <button
                   type="button"
                   className="px-2 text-black"
-                  onClick={() => handleRemove(image)}
+                  onClick={() => handleRemove(image.url)}
                 >
                   X
                 </button>
@@ -366,7 +384,7 @@ const AddForm = () => {
 
         <button
           type="submit"
-          className="flex items-center justify-center px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+          className="flex items-center justify-center px-4 py-2 mt-10 text-white bg-blue-600 rounded hover:bg-blue-700"
           disabled={loading}
         >
           {loading ? "Loading..." : "Submit"}

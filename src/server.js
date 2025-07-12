@@ -1,15 +1,24 @@
+import dotenv from "dotenv";
 import express from "express";
 import cors from "cors";
-import mongoose, { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose"; 
 import session from "express-session";
 import passport from "passport";
 import passportLocalMongoose from "passport-local-mongoose";
 import { isAdmin } from "./assets/isAdmin.js";
-import dotenv from "dotenv";
-import { dog } from "@cloudinary/url-gen/qualifiers/focusOn";
+import sendEmailRoute from "./sendMail.js"; 
+import { v2 as cloudinary } from 'cloudinary'; 
 
 const app = express();
 dotenv.config();
+
+
+
+cloudinary.config({
+  cloud_name: process.env.CLOUD_NAME,
+  api_key:    process.env.CLOUD_API_KEY,
+  api_secret: process.env.CLOUD_API_SECRET,
+});
 
 app.use(
   cors({
@@ -21,10 +30,11 @@ app.use(
     ],
     credentials: true,
   })
-);
+); 
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use("/", sendEmailRoute);
 
 app.use(
   session({
@@ -74,7 +84,7 @@ const dogSchema = new mongoose.Schema({
   registries: {
     type: Array,
   },
-  desc: {
+  description: {
     type: String,
   },
   age: {
@@ -156,10 +166,7 @@ async function createInitialAdmin() {
 
 // createInitialAdmin();
 
-app.post("/contact", (req, res) => {
-  console.log("Contact form submission:", req.body);
-  res.status(200).json({ message: "Contact received" });
-});
+
 
 app.get("/lobby/:field", async (req, res) => {
   const entry = req.params.field;
@@ -214,17 +221,46 @@ app.post("/cloudinarysave", isAdmin, async (req, res) => {
 app.get("/profile/:serial_no", async (req, res) => {
   const serial_no = req.params.serial_no;
   try {
-    const user = await Dog.findOne({ serial_no });
-    if (!user) {
-      return res.status(404).json({ error: "User not found" });
+    const dog = await Dog.findOne({ serial_no });
+    if (!dog) {
+      return res.status(404).json({ error: "Dog not found" });
     }
 
-    res.status(200).json({ dog: user });
+    res.status(200).json({ dog: dog });
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: "Server error" });
   }
+}); 
+
+
+app.delete("/profile/:serial_no", async (req, res) => {
+  try {
+    const { serial_no } = req.params;
+    const dog = await Dog.findOne({ serial_no });
+
+    
+
+    if (!dog) {
+      return res.status(404).json({ message: "Dog not found" });
+    }
+    
+    const deletePromises = (dog.images || []).map(img =>
+      cloudinary.uploader.destroy(img.public_id)
+   
+
+    );
+    await Promise.all(deletePromises);
+
+    await Dog.deleteOne({ serial_no });
+
+    res.status(200).json({ message: "Dog and associated images deleted" });
+  } catch (err) {
+    console.error("Delete error:", err);
+    res.status(500).json({ error: "Server error" });
+  }
 });
+
 
 app.get("/dogs/:id/:limit", async (req, res) => {
   const dogId = req.params.id;
