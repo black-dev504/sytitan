@@ -12,7 +12,7 @@ import { v2 as cloudinary } from 'cloudinary';
 const app = express();
 dotenv.config();
 
-
+let dataVersion = Date.now();
 
 cloudinary.config({
   cloud_name: process.env.CLOUD_NAME,
@@ -166,7 +166,9 @@ async function createInitialAdmin() {
 
 // createInitialAdmin();
 
-
+app.get("/cache-version", (req, res) => {
+  res.json({ version: dataVersion });
+});
 
 app.get("/lobby/:field", async (req, res) => {
   const entry = req.params.field;
@@ -194,6 +196,7 @@ app.post("/admin/dashboard", isAdmin, async (req, res) => {
     const dog = new Dog(req.body);
 
     const newDog = await dog.save();
+    dataVersion = Date.now();
     res.status(200).json({ message: "successful", newDog });
   } catch (err) {
     res.status(500).json({ error: err.message });
@@ -253,7 +256,7 @@ app.delete("/profile/:serial_no", async (req, res) => {
     await Promise.all(deletePromises);
 
     await Dog.deleteOne({ serial_no });
-
+    dataVersion = Date.now();
     res.status(200).json({ message: "Dog and associated images deleted" });
   } catch (err) {
     console.error("Delete error:", err);

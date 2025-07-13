@@ -22,6 +22,18 @@ const DeleteForm = ()=>{
                 setLoading(true)
                 const res = await deleteDog(id); 
                 alert(res.data.message || "Dog deleted!");
+
+                
+                const cacheKey = `similar_dogs_${id}`;
+                localStorage.removeItem(cacheKey);
+
+                Object.keys(localStorage).forEach(key => {
+                  if (key.includes(id)) {
+                    localStorage.removeItem(key);
+                  }
+                });
+
+
                 setDogData(false)
                 setLoading(false)
                 setSearchValue('')

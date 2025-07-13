@@ -2,18 +2,19 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../Authprovider";
 import { addData as addDog } from "../../auth";
 import { useNavigate } from "react-router-dom";
-import { cloudinary as addImage } from "../../auth";
 import Pills from "./Pills";
 
 const AddForm = () => {
   const { user } = useAuth();
   const navigate = useNavigate();
-  const [mssg, setMssg] = useState(`Welcome ${user?.username || ""}`);
   const [tags, setTags] = useState([]);
   const [registries, setRegistries] = useState([]);
   const [images, setImages] = useState([]); // [{ file, url }]
   const [imgError, setImgError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [uploadStatus, setUploadStatus] = useState("");
+  const [mssg, setMssg] = useState("");
+  const [statusType, setStatusType] = useState(""); // "success" | "error" | "info"
 
   const initialForm = {
     serial_no: "",
@@ -65,10 +66,10 @@ const AddForm = () => {
   }, [images]);
 
   const throwError = (mssg) => {
-    setMssg(mssg)
+    setStatusType("error");
+    setMssg(mssg);
     window.scrollTo({ top: 0, behavior: "smooth" });
-
-  }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -122,105 +123,104 @@ const AddForm = () => {
 
     setImages((prev) => [...prev, ...newImages]);
     setImgError("");
-    console.log(images);
-    
-
   };
 
   const handleRemove = (url) => {
     setImages((prev) => prev.filter((img) => img.url !== url));
     setImgError("");
-  
-    
   };
 
   const uploadToCloudinary = async (file) => {
-  const url = import.meta.env.VITE_CLOUDINARY_URL;
+    const url = import.meta.env.VITE_CLOUDINARY_URL;
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("upload_preset", "sytitan-preset");
 
-  const formData = new FormData();
-  formData.append("file", file);
-  formData.append("upload_preset", "sytitan-preset");
+    const response = await fetch(url, {
+      method: "POST",
+      body: formData,
+    });
 
-  const response = await fetch(url, {
-    method: "POST",
-    body: formData,
-  });
-
-    
-  if (!response.ok) {
-    throw new Error("Cloudinary upload failed");
-  }
-
-  const data = await response.json();
-  console.log(data);
-  
-  return data;
-};
-
-const handleSubmit = async (e) => {
-  e.preventDefault();
-  if (loading) return;
-
-  if (tags.length === 0) {
-    throwError("Please add at least one tag.");
-    return;
-  }
-
-  try {
-    setLoading(true);
-    let uploadedImages = [];
+    if (!response.ok) {
+      throw new Error("Cloudinary upload failed");
+    }
 
     try {
-      const uploadPromises = images.map(({ file }) => uploadToCloudinary(file));
-      uploadedImages = await Promise.all(uploadPromises);
+      const data = await response.json();
+      return data;
+    } catch {
+      throw new Error("Failed to parse Cloudinary response");
+    }
+  };
 
-      const imageData = uploadedImages.map(res => ({
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (loading) return;
+
+    if (tags.length === 0) {
+      throwError("Please add at least one tag.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      setStatusType("info");
+      setMssg("Uploading images and saving dog...");
+
+      const uploadPromises = images.map(({ file }) =>
+        uploadToCloudinary(file)
+      );
+      const uploadedImages = await Promise.all(uploadPromises);
+
+      const imageData = uploadedImages.map((res) => ({
         url: res.secure_url,
         public_id: res.public_id,
       }));
 
-      setImages(imageData); // optional — only needed if UI needs preview
-    } catch (uploadError) {
-      console.error("Image upload error:", uploadError);
-      throwError("Image upload failed. Please check your internet and try again.");
+      const newDog = {
+        ...form,
+        tags,
+        registries,
+        images: imageData,
+      };
+
+      await addDog(newDog);
+
+      setStatusType("success");
+      setMssg(`Successfully added ${form.name}`);
+
+      // Clear form
+      localStorage.removeItem("add-dog-form");
+      localStorage.removeItem("add-dog-tags");
+      localStorage.removeItem("add-dog-registries");
+      setForm(initialForm);
+      setTags([]);
+      setRegistries([]);
+      setImages([]);
+      setImgError("");
       setLoading(false);
-      return;
+      navigate("/admin/dashboard");
+    } catch (err) {
+      const message = err?.response?.data?.error || "Something went wrong";
+      throwError(message);
+      setLoading(false);
     }
+  };
 
-    // 👇 Submit the actual uploaded image data
-    const newDog = {
-      ...form,
-      tags,
-      registries,
-      images: uploadedImages.map(res => ({
-        url: res.secure_url,
-        public_id: res.public_id,
-      })),
-    };
-
-    await addDog(newDog);
-
-    setMssg(`Successfully added ${form.name}`);
-
-    // Clean up
-    localStorage.removeItem("add-dog-form");
-    localStorage.removeItem("add-dog-tags");
-    localStorage.removeItem("add-dog-registries");
-    setForm(initialForm);
-    setTags([]);
-    setRegistries([]);
-    setImages([]);
-    setImgError("");
-    setLoading(false);
-    navigate("/admin/dashboard");
-  } catch (err) {
-    const message = err?.response?.data?.error || "Something went wrong";
-    throwError(message);
-    setLoading(false);
-    console.error("Form submission error:", message);
-  }
-};
-
+  const StatusMessage = () =>
+    mssg && (
+      <div
+        className={`p-4 my-4 text-white rounded ${
+          statusType === "success"
+            ? "bg-green-600"
+            : statusType === "error"
+            ? "bg-red-600"
+            : "bg-blue-600"
+        }`}
+      >
+        {mssg}
+      </div>
+    );
 
   if (!user) {
     return <h1 className="text-5xl font-black">Please login to access this page</h1>;
@@ -228,38 +228,38 @@ const handleSubmit = async (e) => {
 
   return (
     <section className="px-5 pt-20 lg:px-35">
-      <h1 className="text-5xl font-black">{mssg}</h1>
+      <h1 className="text-5xl font-black">Welcome {user?.username || ""}</h1>
+      <StatusMessage />
       <form
         onSubmit={handleSubmit}
         className="p-4 mx-auto mt-10 space-y-4 bg-white rounded shadow max-w-7/10"
       >
-     
+        {[
+          { id: "serial_no", label: "Serial No", required: true },
+          { id: "name", label: "Name", required: true },
+          { id: "pedigree", label: "Pedigree" },
+          { id: "age", label: "Age" },
+          { id: "color", label: "Color" },
+          { id: "height", label: "Height" },
+          { id: "gender", label: "Gender" },
+          { id: "headSize", label: "Head Size" },
+          { id: "class", label: "Class" },
+        ].map(({ id, label, required }) => (
+          <div key={id}>
+            <label htmlFor={id}>{label}</label>
+            <input
+              id={id}
+              name={id}
+              type="text"
+              value={form[id]}
+              onChange={handleChange}
+              required={required}
+              className="w-full p-2 border rounded"
+            />
+          </div>
+        ))}
 
-         {[
-        { id: "serial_no", label: "Serial No", required: true },
-        { id: "name", label: "Name", required: true },
-        { id: "pedigree", label: "Pedigree" },
-        { id: "age", label: "Age" },
-        { id: "color", label: "Color" },
-        { id: "height", label: "Height" },
-        { id: "gender", label: "Gender" },
-        { id: "headSize", label: "Head Size" },
-        { id: "class", label: "Class" },
-      ].map(({ id, label, required }) => (
-        <div key={id}>
-          <label htmlFor={id}>{label}</label>
-          <input
-            id={id}
-            name={id}
-            type="text"
-            value={form[id]}
-            onChange={handleChange}
-            required={required}
-            className="w-full p-2 border rounded"
-          />
-        </div>
-      ))}
-
+        {/* Tags & Registries */}
         <div>
           <label htmlFor="tags">Tags (Press Enter or Space to add)</label>
           <input
@@ -281,22 +281,19 @@ const handleSubmit = async (e) => {
         </div>
 
         <div>
-          <label htmlFor="registries">
-            Registries (Press Enter or Space to add)
-          </label>
+          <label htmlFor="registries">Registries</label>
           <input
             id="registries"
-            name="registries"
             type="text"
             onKeyDown={(e) => addPill(e, registries, setRegistries)}
             className="w-full p-2 border rounded"
           />
-          <div className="inline-block mt-3 registries">
-            {registries.map((r, index) => (
+          <div className="inline-block mt-3">
+            {registries.map((reg, index) => (
               <Pills
-                value={r}
+                value={reg}
                 key={index}
-                onRemove={() => removePill(r, setRegistries)}
+                onRemove={() => removePill(reg, setRegistries)}
               />
             ))}
           </div>
@@ -306,8 +303,8 @@ const handleSubmit = async (e) => {
           <label htmlFor="desc">Description</label>
           <textarea
             id="desc"
-            rows={4}
             name="desc"
+            rows="4"
             value={form.desc}
             onChange={handleChange}
             className="w-full p-2 border rounded"
@@ -317,26 +314,24 @@ const handleSubmit = async (e) => {
         <div>
           <label>Status</label>
           <div className="mt-1">
-            <label htmlFor="for-sale">
+            <label>
               <input
-                id="for-sale"
                 type="radio"
                 name="status"
                 value="FOR SALE"
-                onChange={handleChange}
                 checked={form.status === "FOR SALE"}
+                onChange={handleChange}
                 className="ml-3 mr-1"
               />
               For Sale
             </label>
-            <label htmlFor="not-for-sale">
+            <label>
               <input
-                id="not-for-sale"
                 type="radio"
                 name="status"
                 value="NOT FOR SALE"
-                onChange={handleChange}
                 checked={form.status === "NOT FOR SALE"}
+                onChange={handleChange}
                 className="ml-5 mr-1"
               />
               Not for Sale
@@ -355,31 +350,26 @@ const handleSubmit = async (e) => {
             className="w-full"
             required
           />
+          <h1 className="text-xl text-red-500">{imgError}</h1>
         </div>
 
-        <div>
+        <div className="flex flex-wrap gap-4">
           {images.map((image, index) => (
-            <div
-              key={index}
-              className="max-w-[200px] max-h-[200px] overflow-hidden relative inline-block mr-2 mt-2"
-            >
+            <div key={index} className="relative max-w-[200px]">
               <img
                 src={image.url}
                 alt={`preview-${index}`}
-                className=" object-contain mb-5 overflow-hidden "
+                className="object-cover w-full h-auto rounded"
               />
-              <div className="bg-white hover:bg-red-500 absolute left-[80%] mt-1 mr-2 top-0 rounded-full">
-                <button
-                  type="button"
-                  className="px-2 text-black"
-                  onClick={() => handleRemove(image.url)}
-                >
-                  X
-                </button>
-              </div>
+              <button
+                type="button"
+                onClick={() => handleRemove(image.url)}
+                className="absolute top-1 right-1 bg-white text-red-600 rounded-full px-2"
+              >
+                X
+              </button>
             </div>
           ))}
-          <h1 className="text-xl text-red-500">{imgError}</h1>
         </div>
 
         <button

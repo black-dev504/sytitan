@@ -52,4 +52,8 @@ export const sendEmail = async (payload) => {
   return await api.post("/send-email", payload);
 };
 
+export const version = async () => {
+  return await api.get("/cache-version");
+};
+
 

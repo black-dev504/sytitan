@@ -3,56 +3,54 @@ import Dogcard from "./landing/Dogcard";
 import { getDogs as dogData } from "../../auth";
 import Dogsskeleton from "./Dogsskeleton";
 import Heading from './Heading';
+import { version as dataVersion } from "../../auth";
 
 const Lobby = () => {
-  // Filter categories
   const filters = ["ALL", "STUDS", "BITCHES", "PUPPIES", "UPCOMING"];
 
-  // State for selected filter
   const [activeFilter, setActiveFilter] = useState("ALL");
-
-  // Dogs data, loading & error state
   const [dogs, setDogs] = useState([]);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const CACHE_KEY = "dogs_ALL";
-  const CACHE_TIME_MS = 1000 * 60 * 60 * 2;
+  const CACHE_TIME_MS = 1000 * 60 * 60 * 24; // 24 hours
+  const VERSION_KEY = "dataVersion";
 
-  // Fetch initial list of dogs (defaults to ALL)
+  // Initial load for ALL filter
   useEffect(() => {
     const fetchDogs = async () => {
       try {
-        const cached = localStorage.getItem(CACHE_KEY);
-        console.log("Cached dogs:", cached);
-        
+        const cacheKey = "dogs_ALL";
+        const cached = localStorage.getItem(cacheKey);
+        const versionCached = localStorage.getItem(VERSION_KEY);
+        const currentVersion = await dataVersion();
+
         if (cached) {
           const parsed = JSON.parse(cached);
           const now = Date.now();
 
-          // If cache is fresh, use it
-          if (now - parsed.timestamp < CACHE_TIME_MS) {
+          if (
+            now - parsed.timestamp < CACHE_TIME_MS &&
+            versionCached === currentVersion.toString()
+          ) {
             setDogs(parsed.data);
             setLoading(false);
             return;
           }
         }
 
-        // Fetch fresh data if cache is invalid or missing
         const response = await dogData("ALL");
         const fetchedDogs = response.data.dog;
-
         setDogs(fetchedDogs);
-        console.log("Fetched dogs:", fetchedDogs);
 
-        // Cache the fetched data
         localStorage.setItem(
-          CACHE_KEY,
+          cacheKey,
           JSON.stringify({
             timestamp: Date.now(),
             data: fetchedDogs,
           })
         );
+        localStorage.setItem(VERSION_KEY, currentVersion.toString());
       } catch (err) {
         console.error("Failed to fetch dogs:", err);
         setError("Failed to fetch dogs.");
@@ -64,42 +62,45 @@ const Lobby = () => {
     fetchDogs();
   }, []);
 
-  // Handle filter click
   const handleClick = async (filter) => {
     setActiveFilter(filter);
     setLoading(true);
+    setError("");
 
     const cacheKey = `dogs_${filter}`;
 
     try {
       const cached = localStorage.getItem(cacheKey);
-      const now = Date.now();
+      const versionCached = localStorage.getItem(VERSION_KEY);
+      const currentVersion = await dataVersion();
 
       if (cached) {
-        // Use cached data
         const parsed = JSON.parse(cached);
-        if (now - parsed.timestamp < CACHE_TIME_MS) {
+
+        if (
+          Date.now() - parsed.timestamp < CACHE_TIME_MS &&
+          versionCached === currentVersion.toString()
+        ) {
           setDogs(parsed.data);
           setLoading(false);
-          setError("");
           return;
         }
       }
 
-      // Fetch new data if no valid cache or cache expired
       const response = await dogData(filter);
       const fetchedDogs = response.data.dog;
       setDogs(fetchedDogs);
-      setError("");
 
-      // Save to cache
-      localStorage.setItem(
-        cacheKey,
-        JSON.stringify({
-          timestamp: Date.now(),
-          data: fetchedDogs,
-        })
-      );
+      if (fetchedDogs.length > 0) {
+        localStorage.setItem(
+          cacheKey,
+          JSON.stringify({
+            timestamp: Date.now(),
+            data: fetchedDogs,
+          })
+        );
+        localStorage.setItem(VERSION_KEY, currentVersion.toString());
+      }
     } catch (err) {
       const errMsg = err?.response?.data?.error || "Failed to fetch dogs";
       setError(errMsg);
@@ -108,7 +109,6 @@ const Lobby = () => {
     }
   };
 
-  // No results component
   const NoResults = () => (
     <div className="text-white font-bold text-3xl">
       No dogs available for this filter
@@ -117,10 +117,8 @@ const Lobby = () => {
 
   return (
     <section>
-      {/* Header background section */}
       <Heading image='/images/lobbypic.png' title='MEET THE BULLIES' />
 
-      {/* Filter buttons */}
       <div className="px-5 lg:px-20 bg-[#252525] py-12">
         <div className="filters flex overflow-x-auto gap-6">
           {filters.map((filter, index) => (
@@ -134,7 +132,6 @@ const Lobby = () => {
         </div>
       </div>
 
-      {/* Dogs grid */}
       <section className="bg-black justify-center flex flex-col items-center">
         <div className="grid lg:grid-cols-3 md:grid-cols-2 grid-cols-1 gap-8 px-5 lg:px-20 py-8">
           {loading ? (
@@ -161,7 +158,6 @@ const Lobby = () => {
   );
 };
 
-// Filter button component
 const FilterButton = ({ text, isSelected, onClick }) => {
   return (
     <button

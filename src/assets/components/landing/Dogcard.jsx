@@ -23,7 +23,7 @@ const Dogcard = ({ images, name, age, color, serial_no }) => {
   };
 
   // Fallback image if no image provided
-  const mainImage = images?.[0] || '/images/noimgplaceholder.svg';
+  const mainImage = images?.[0].url || '/images/noimgplaceholder.svg';
 
   return (
     <div className="rounded-4xl md:min-w-0 min-w-[300px] max-w-[400px] flex flex-col bg-[#252525]">

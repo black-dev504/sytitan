@@ -3,8 +3,10 @@ import Dogcard from "./Dogcard";
 import { dogs as getDogs } from "../../../auth";
 import { useNavigate } from "react-router-dom";
 import Dogsskeleton from "../Dogsskeleton";
+import { version as dataVersion } from "../../../auth";
 
 const CACHE_KEY = "cachedDogs";
+const VERSION_KEY = "dataVersion";
 const CACHE_TIME_MS = 1000 * 60 * 60 * 24;
 
 const Dogs = () => {
@@ -16,32 +18,41 @@ const Dogs = () => {
     const fetchDogs = async () => {
       try {
         const cached = localStorage.getItem(CACHE_KEY);
+        const versionCached = localStorage.getItem(VERSION_KEY);
+       
 
-        if (cached && !cached.data) {
+        if (cached && versionCached) {
           const parsed = JSON.parse(cached);
-          const now = Date.now();
+          const currentVersion = await dataVersion(); 
 
-          if (now - parsed.timestamp < CACHE_TIME_MS) {
+          if (
+            Date.now() - parsed.timestamp < CACHE_TIME_MS &&
+            versionCached === currentVersion.toString()
+          ) {
             setDogs(parsed.data);
             setLoading(false);
             return;
           } else {
             localStorage.removeItem(CACHE_KEY);
+            localStorage.removeItem(VERSION_KEY);
           }
         }
-        // Otherwise fetch from API
+
+        // Fetch fresh data
         const response = await getDogs(null, 6);
         const fetchedDogs = response.data.dogs;
         setDogs(fetchedDogs);
 
-        // Save to localStorage
-        localStorage.setItem(
-          CACHE_KEY,
-          JSON.stringify({
-            timestamp: Date.now(),
-            data: fetchedDogs,
-          })
-        );
+        if (fetchedDogs.length > 0) {
+          localStorage.setItem(
+            CACHE_KEY,
+            JSON.stringify({
+              timestamp: Date.now(),
+              data: fetchedDogs,
+            })
+          );
+          localStorage.setItem(VERSION_KEY, currentVersion.toString());
+        }
       } catch (err) {
         console.error("Failed to fetch dogs:", err);
       } finally {

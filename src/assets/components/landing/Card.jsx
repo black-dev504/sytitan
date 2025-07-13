@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Card = ({ img, title, paragraph }) => {
+const Card = ({ title, paragraph }) => {
   return (
   
       <div className="flex relative z-10 flex-col tems-center min-h-[170px] my-8 border text-center border-[#FFAC38] px-7 py-7 rounded-2xl">
