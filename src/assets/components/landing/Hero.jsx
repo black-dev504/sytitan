@@ -43,7 +43,7 @@ const navigate = useNavigate();
 
         {/* Right Section */}
         <div className='h-full w-full'>
-          <img className='w-full h-full object-cover' src="/images/hero.png" alt="heropic" />
+          <img className='w-full h-full object-contain' src="/images/hero.png" alt="heropic" />
         </div>
       </div>
     </section>
