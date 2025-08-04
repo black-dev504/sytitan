@@ -29,13 +29,13 @@ const Journey = () => {
           {/*</div>*/}
 
           <div className='flex flex-col justify-center p-4 lg:p-8'>
-            <div className='grid grid-cols-2 mb-2 items-baseline lg:mb-4 gap-2 lg:gap-4'>
-              <img src='/images/journeypic1.jpeg' alt="" className='w-full h-auto object-cover' />
-              <img src='/images/journeypic2.jpeg' alt="" className='w-full h-auto object-cover' />
+            <div className='grid grid-cols-2 mb-2  lg:mb-4 gap-2 lg:gap-4'>
+              <img src='/images/journeypic1.jpeg' alt="" className='self-end object-cover' />
+              <img src='/images/journeypic2.jpeg' alt="" className='self-end object-cover' />
             </div>
             <div className='grid grid-cols-[55%_45%] gap-2 lg:gap-4'>
               <img src='/images/journeypic3.jpeg' alt="" className='w-full h-auto object-cover' />
-              <img src='/images/journeypic4.jpeg' alt="" className='w-full h-auto object-cover' />
+              <img src='/images/journeypic4.jpeg' alt="" className='w-full h-full object-cover' />
             </div>
           </div>
 
