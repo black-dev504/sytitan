@@ -117,7 +117,7 @@ const Lobby = () => {
 
   return (
     <section>
-      <Heading image='/images/lobbypic.png' title='MEET THE BULLIES' />
+      <Heading image='/images/real-lobbypic.png' title='MEET THE BULLIES' />
 
       <div className="px-5 lg:px-20 bg-[#252525] py-12">
         <div className="filters flex overflow-x-auto gap-6">
