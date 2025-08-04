@@ -17,14 +17,25 @@ const Journey = () => {
           </div>
 
           {/* Image Grid */}
-          <div className='overflow-y-visible flex flex-col lg:my-4'>
-            <div className='grid grid-cols-2 items-baseline mb-2 md:mb-4 gap-2 md:gap-4'>
-              <img src='/images/journeypic1.jpeg' alt="" />
-              <img src='/images/journeypic2.jpeg' alt="" />
+          {/*<div className='overflow-y-visible flex flex-col lg:my-4'>*/}
+          {/*  <div className='grid grid-cols-2 items-baseline mb-2 md:mb-4 gap-2 md:gap-4'>*/}
+          {/*    <img src='/images/journeypic1.jpeg' alt="" />*/}
+          {/*    <img src='/images/journeypic2.jpeg' alt="" />*/}
+          {/*  </div>*/}
+          {/*  <div className='grid grid-cols-[55%_45%] gap-2 md:gap-4'>*/}
+          {/*    <img src='/images/journeypic3.jpeg' alt="" />*/}
+          {/*    <img src='/images/journeypic4.jpeg' alt="" />*/}
+          {/*  </div>*/}
+          {/*</div>*/}
+
+          <div className='flex flex-col justify-center p-4 lg:p-8'>
+            <div className='grid grid-cols-2 mb-2 lg:mb-4 gap-2 lg:gap-4'>
+              <img src='/images/journeypic1.jpeg' alt="" className='w-full h-auto object-cover' />
+              <img src='/images/journeypic2.jpeg' alt="" className='w-full h-auto object-cover' />
             </div>
-            <div className='grid grid-cols-[55%_45%] gap-2 md:gap-4'>
-              <img src='/images/journeypic3.jpeg' alt="" />
-              <img src='/images/journeypic4.jpeg' alt="" />
+            <div className='grid grid-cols-[55%_45%] gap-2 lg:gap-4'>
+              <img src='/images/journeypic3.jpeg' alt="" className='w-full h-auto object-cover' />
+              <img src='/images/journeypic4.jpeg' alt="" className='w-full h-auto object-cover' />
             </div>
           </div>
 
