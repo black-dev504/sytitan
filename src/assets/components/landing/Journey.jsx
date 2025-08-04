@@ -3,28 +3,28 @@ import React from 'react'
 const Journey = () => {
   return (
       <section className='bg-secondary'>
-        <div className="grid grid-cols-1 lg:grid-cols-2 py-4 md:py-8 lg:py-15 gap-4 md:gap-8 lg:gap-20 md:ml-5 lg:ml-25 items-center">
+        <div className="grid grid-cols-1 lg:grid-cols-2 px-4 md:px-5 lg:ml-25 min-h-screen lg:min-h-0">
 
           {/* Text Content */}
-          <div className="flex items-center lg:items-start px-5 text-center lg:text-start flex-col">
-            <h1 className='text-4xl md:text-5xl text-[#ECECEC] font-semibold py-4 md:py-6 lg:py-12'>Our Journey</h1>
-            <p className='text-xl md:text-2xl font-normal text-white'>
-              SY TITAN is a dedicated breeding kennel based in Paradis Island, focused on producing exceptional American Bullies with strong lineage, stable temperaments, and striking appearance. Located in the quiet countryside of Japan, our dogs are raised in a clean, well-structured environment with early socialization and plenty of space to thrive. We believe in ethical breeding practices and connecting responsible owners with companions raised with care, purpose, and pride.
+          <div className="flex justify-center lg:justify-start items-center lg:items-start text-center lg:text-start flex-col py-8 lg:py-20">
+            <h1 className='text-3xl sm:text-4xl lg:text-5xl text-[#ECECEC] font-semibold mb-4 lg:mb-8'>Our Journey</h1>
+            <p className='text-lg sm:text-xl lg:text-2xl font-normal text-white mb-6 max-w-full'>
+              SY TITAN started in Nigeria with a simple goal: to raise American Bullies that stand out — not just in looks, but in strength, stability, and heart. What began as a passion grew into a purpose — building bloodlines rooted in quality and care. Over time, our commitment attracted dog lovers from beyond our borders, and today we proudly ship internationally, connecting families across the world with Bullies raised in Africa, bred with love, and built with pride. Every dog that leaves our kennel carries a piece of our story — a journey of purpose, discipline, and dedication.
             </p>
-            <button className='px-9 py-6 hover:border-1 max-w-[200px] mt-6 cursor-pointer rounded-[40px] bg-primary text-white'>
+            <button className='px-9 py-6 hover:border-1 max-w-[200px] cursor-pointer rounded-[40px] bg-primary text-white'>
               Explore Kernel
             </button>
           </div>
 
           {/* Image Grid */}
-          <div className='overflow-y-visible flex flex-col lg:my-4'>
-            <div className='grid grid-cols-2 items-baseline mb-2 md:mb-4 gap-2 md:gap-4'>
-              <img src='/images/journeypic1.jpeg' alt="" />
-              <img src='/images/journeypic2.jpeg' alt="" />
+          <div className='flex flex-col justify-center p-4 lg:p-8'>
+            <div className='grid grid-cols-2 mb-2 lg:mb-4 gap-2 lg:gap-4'>
+              <img src='/images/journeypic1.jpeg' alt="" className='w-full h-auto object-cover' />
+              <img src='/images/journeypic2.jpeg' alt="" className='w-full h-auto object-cover' />
             </div>
-            <div className='grid grid-cols-[55%_45%] gap-2 md:gap-4'>
-              <img src='/images/journeypic3.jpeg' alt="" />
-              <img src='/images/journeypic4.jpeg' alt="" />
+            <div className='grid grid-cols-[55%_45%] gap-2 lg:gap-4'>
+              <img src='/images/journeypic3.jpeg' alt="" className='w-full h-auto object-cover' />
+              <img src='/images/journeypic4.jpeg' alt="" className='w-full h-auto object-cover' />
             </div>
           </div>
 
@@ -33,4 +33,5 @@ const Journey = () => {
 
   )
 }
+
 export default Journey
