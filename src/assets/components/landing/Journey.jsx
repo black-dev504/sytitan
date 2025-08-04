@@ -17,7 +17,7 @@ const Journey = () => {
           </div>
 
           {/* Image Grid */}
-          {/*<div className='overflow-y-visible flex flex-col lg:my-4'>*/}
+          {/*<div className='flex flex-col justify-center p-4 lg:p-8'>*/}
           {/*  <div className='grid grid-cols-2 items-baseline mb-2 md:mb-4 gap-2 md:gap-4'>*/}
           {/*    <img src='/images/journeypic1.jpeg' alt="" />*/}
           {/*    <img src='/images/journeypic2.jpeg' alt="" />*/}
@@ -29,7 +29,7 @@ const Journey = () => {
           {/*</div>*/}
 
           <div className='flex flex-col justify-center p-4 lg:p-8'>
-            <div className='grid grid-cols-2 mb-2 lg:mb-4 gap-2 lg:gap-4'>
+            <div className='grid grid-cols-2 mb-2 items-baseline lg:mb-4 gap-2 lg:gap-4'>
               <img src='/images/journeypic1.jpeg' alt="" className='w-full h-auto object-cover' />
               <img src='/images/journeypic2.jpeg' alt="" className='w-full h-auto object-cover' />
             </div>
