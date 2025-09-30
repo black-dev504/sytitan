@@ -30,8 +30,6 @@ function App() {
           <Route path="/lobby" element={ <Lobby />  } />
           <Route path="/profile" element={ <Profile /> } />
           <Route path="/about" element={ <About /> } />
-
-
       </Routes>
       <Footer />
       </Router>
