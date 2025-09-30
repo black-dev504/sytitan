@@ -145,6 +145,7 @@ const Lobby = () => {
                 status={dog.status}
                 images={dog.images}
                 serial_no={dog.serial_no}
+                color={dog.color}
               />
             ))
           ) : error ? (
