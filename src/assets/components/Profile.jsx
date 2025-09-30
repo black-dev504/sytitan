@@ -127,7 +127,10 @@ const Profile = () => {
           <ProfileDetail label="Registries">
             {dog.registries && dog.registries.length > 0 ? dog.registries.join(", ") : <NotAvailable />}
           </ProfileDetail>
-          <ProfileDetail label="Description">{dog.description || <NotAvailable />}</ProfileDetail>
+           <div className="flex py-1 gap-6">
+            <span className="font-bold min-w-[120px]">Description</span>
+            <span className="break-words text-sm italic">{dog.description || <NotAvailable />}</span>
+          </div>
         </div>
       </div>
 

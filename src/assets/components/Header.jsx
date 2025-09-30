@@ -43,7 +43,7 @@ const [isMenuOpen, setIsMenuOpen] = useState(false)
         {isMenuOpen && (
         <div className="md:hidden w-full z-10 absolute text-[#e3e3e3] bg-black px-4 py-2">
           <ul className="flex flex-col space-y-2">
-               <li className=' cursor-pointer hover:underline hover:text-blue-500'><a href="/"></a>Home</li>
+               <li className=' cursor-pointer hover:underline hover:text-blue-500'><a href="/">Home</a></li>
                 <li className='hover:underline hover:text-blue-500' ><a href="/about">About us</a></li>
                 <li className='hover:underline hover:text-blue-500'><a href="/program">Our program</a></li>
                 <li className='hover:underline hover:text-blue-500 text-[#FFAC38]'><a href="/contact">Contact Us</a></li>
