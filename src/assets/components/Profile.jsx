@@ -149,6 +149,7 @@ const Profile = () => {
                   age={data.age}
                   status={data.status}
                   images={data.images}
+                  color={data.color}
                   serial_no={data.serial_no}
                 />
               </Suspense>
