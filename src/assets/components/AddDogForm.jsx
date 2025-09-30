@@ -107,23 +107,37 @@ const AddForm = () => {
     setArr((prev) => prev.filter((pill) => pill !== pillToRemove));
   };
 
-  const handleImageChange = (e) => {
-    const files = Array.from(e.target.files);
-    if (!files.length) return;
+ const handleImageChange = (e) => {
+  const files = Array.from(e.target.files);
+  if (!files.length) return;
 
-    if (images.length + files.length > 3) {
-      setImgError("Maximum of three pictures allowed");
-      return;
+  if (images.length + files.length > 3) {
+    setImgError("Maximum of three pictures allowed");
+    return;
+  }
+
+  // Allowed formats
+  const allowedTypes = ["image/jpeg", "image/png", "image/jpg", "image/webp"];
+
+  const filteredFiles = files.filter((file) => {
+    if (!allowedTypes.includes(file.type)) {
+      setImgError(`File format not supported: ${file.name}`);
+      return false;
     }
+    return true;
+  });
 
-    const newImages = files.map((file) => ({
-      file,
-      url: URL.createObjectURL(file),
-    }));
+  if (!filteredFiles.length) return;
 
-    setImages((prev) => [...prev, ...newImages]);
-    setImgError("");
-  };
+  const newImages = filteredFiles.map((file) => ({
+    file,
+    url: URL.createObjectURL(file),
+  }));
+
+  setImages((prev) => [...prev, ...newImages]);
+  setImgError("");
+};
+
 
   const handleRemove = (url) => {
     setImages((prev) => prev.filter((img) => img.url !== url));
