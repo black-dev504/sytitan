@@ -26,7 +26,8 @@ app.use(
       "http://localhost:5173",
       "https://black-dev504.github.io/sytitan/",
       "https://sytitan-black-dev504s-projects.vercel.app",
-      "https://sytitan.vercel.app",
+      "https://sytitan.vercel.app/",
+      "https://sytitan.onrender.com/",
     ],
     credentials: true,
   })
