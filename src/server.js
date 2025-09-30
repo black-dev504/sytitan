@@ -102,6 +102,12 @@ const dogSchema = new mongoose.Schema({
   images: {
     type: Array,
   },
+  description: {
+    type: String,
+  },
+  headSize: {
+    type: String,
+  },
 });
 
 const upcomingBreed = new mongoose.Schema({

@@ -7,7 +7,7 @@ import { version as dataVersion } from "../../../auth";
 
 const CACHE_KEY = "cachedDogs";
 const VERSION_KEY = "dataVersion";
-const CACHE_TIME_MS = 1000 * 60 * 60 * 24;
+const CACHE_TIME_MS = 1000 * 60 * 60; // 60 minutes
 
 const Dogs = () => {
   const navigate = useNavigate();

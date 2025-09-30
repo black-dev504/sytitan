@@ -27,7 +27,7 @@ const AddForm = () => {
     gender: "",
     status: "",
     headSize: "",
-    desc: "",
+    description: "",
     class: "",
     registries: [],
     images: [],
@@ -300,10 +300,10 @@ const AddForm = () => {
         </div>
 
         <div>
-          <label htmlFor="desc">Description</label>
+          <label htmlFor="description">Description</label>
           <textarea
-            id="desc"
-            name="desc"
+            id="description"
+            name="description"
             rows="4"
             value={form.desc}
             onChange={handleChange}

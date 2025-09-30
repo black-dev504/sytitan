@@ -28,7 +28,7 @@ const Login = () => {
     } catch (err) {
       const message = err?.response?.data?.error || 'Login failed';
       setError(message);
-      console.error(message);
+      console.error("Login error:", err);
     } finally {
       setLoading(false);
     }
